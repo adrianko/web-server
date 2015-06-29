@@ -24,11 +24,21 @@ func main() {
     server := http.Server{Addr: ":8000", Handler: &Handler{}}
     
     mux["/"] = hello
+    mux["/html"] = helloHTML
     server.ListenAndServe()
+}
+
+func logRequest(r *http.Request) {
+    fmt.Printf("%s: %s", r.Method, r.URL.String())
 }
 
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
-    fmt.Printf("%s: %s", r.Method, r.URL.String())
+    logRequest(r)
     io.WriteString(w, "Hello world")
+}
+
+func helloHTML(w http.ResponseWriter, r *http.Request) {
+    logRequest(r)
+    io.WriteString(w, "<h1>Hello world</h1>")
 }
