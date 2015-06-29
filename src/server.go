@@ -29,7 +29,7 @@ func main() {
 }
 
 func logRequest(r *http.Request) {
-    fmt.Printf("%s: %s", r.Method, r.URL.String())
+    fmt.Printf("%s: %s\n", r.Method, r.URL.String())
 }
 
 //handlers
