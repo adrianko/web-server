@@ -11,8 +11,8 @@ var mux map[string]func(http.ResponseWriter, *http.Request)
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    if h, ok := mux[r.URL.String()]; ok {
-        h(w, r)
+    if handle, ok := mux[r.URL.String()]; ok {
+        handle(w, r)
         return
     }
     
@@ -24,6 +24,11 @@ func main() {
     server := http.Server{Addr: ":8000", Handler: &Handler{}}
     
     mux = make(map[string]func(http.ResponseWriter, *http.Request))
-    mux["/"] = nil
+    mux["/"] = hello
     server.ListenAndServe()
+}
+
+//handlers
+func hello(w http.ResponseWriter, r *http.Request) {
+    io.WriteString(w, "Hello world")
 }
