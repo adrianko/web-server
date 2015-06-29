@@ -6,7 +6,7 @@ import (
     "io"
 )
 
-var mux map[string]func(http.ResponseWriter, *http.Request)
+var mux map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter, *http.Request))
 
 type Handler struct {}
 
