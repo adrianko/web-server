@@ -23,12 +23,12 @@ func main() {
     fmt.Println("Running server 127.0.0.1:8000")
     server := http.Server{Addr: ":8000", Handler: &Handler{}}
     
-    mux = make(map[string]func(http.ResponseWriter, *http.Request))
     mux["/"] = hello
     server.ListenAndServe()
 }
 
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
+    fmt.Printf("%s: %s", r.Method, r.URL.String())
     io.WriteString(w, "Hello world")
 }
