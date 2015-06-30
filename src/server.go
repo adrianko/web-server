@@ -1,13 +1,13 @@
 package main
 
 import (
-    "fmt"
     "net/http"
     "io"
+    "strconv"
     "log"
 )
 
-const PORT = 8000
+const PORT int = 8000
 
 var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter, 
     *http.Request))
@@ -22,8 +22,8 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    log.Printf("Running server 127.0.0.1:%d", PORT)
-    server := http.Server{Addr: ":" + string(PORT), Handler: &Handler{}}
+    log.Printf("Running server 127.0.0.1:%d\n", PORT)
+    server := http.Server{Addr: ":" + strconv.Itoa(PORT), Handler: &Handler{}}
     
     handlers["/"] = hello
     handlers["/html"] = helloHTML
@@ -31,7 +31,7 @@ func main() {
 }
 
 func logRequest(r *http.Request) {
-    fmt.Printf("%s: %s\n", r.Method, r.URL.String())
+    log.Printf("%s: %s\n", r.Method, r.URL.String())
 }
 
 //handlers
