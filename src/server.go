@@ -19,6 +19,8 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         handle(w, r)
         return
     }
+    
+    error(w, r)
 }
 
 func main() {
@@ -43,4 +45,9 @@ func hello(w http.ResponseWriter, r *http.Request) {
 func helloHTML(w http.ResponseWriter, r *http.Request) {
     logRequest(r)
     io.WriteString(w, "<h1>Hello world</h1>")
+}
+
+func error(w http.ResponseWriter, r *http.Request) {
+    logRequest(r)
+    io.WriteString(w, "<h1>Not found</h1>")
 }
