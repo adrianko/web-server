@@ -4,7 +4,10 @@ import (
     "fmt"
     "net/http"
     "io"
+    "log"
 )
+
+const PORT = 8000
 
 var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter, 
     *http.Request))
@@ -19,8 +22,8 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    fmt.Println("Running server 127.0.0.1:8000")
-    server := http.Server{Addr: ":8000", Handler: &Handler{}}
+    log.Printf("Running server 127.0.0.1:%d", PORT)
+    server := http.Server{Addr: ":" + string(PORT), Handler: &Handler{}}
     
     handlers["/"] = hello
     handlers["/html"] = helloHTML
