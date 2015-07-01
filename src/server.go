@@ -7,6 +7,7 @@ import (
     "log"
 )
 
+const NIC string = "0.0.0.0"
 const PORT int = 8000
 
 var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter, 
@@ -24,8 +25,8 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    log.Printf("Running server 127.0.0.1:%d\n", PORT)
-    server := http.Server{Addr: ":" + strconv.Itoa(PORT), Handler: &Handler{}}
+    log.Printf("Running server %s:%d\n", NIC, PORT)
+    server := http.Server{Addr: NIC + ":" + strconv.Itoa(PORT), Handler: &Handler{}}
     
     handlers["/"] = hello
     handlers["/html"] = helloHTML
