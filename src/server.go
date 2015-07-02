@@ -65,6 +65,7 @@ func helloJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func error(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "text/html")
     w.WriteHeader(http.StatusNotFound)
     send(r, w, http.StatusNotFound, "<h1>Not found</h1>")
 }
