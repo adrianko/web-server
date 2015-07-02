@@ -35,32 +35,36 @@ func main() {
     server.ListenAndServe()
 }
 
-func logRequest(r *http.Request) {
-    log.Printf("%s: %s\n", r.Method, r.URL.String())
+func logRequest(r *http.Request, w http.ResponseWriter, status int) {
+    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
 }
 
-func send(r *http.Request, w http.ResponseWriter, content string) {
-    logRequest(r)
+func sendOK(r *http.Request, w http.ResponseWriter, content string) {
+    send(r, w, http.StatusOK, content)
+}
+
+func send(r *http.Request, w http.ResponseWriter, status int, content string) {
+    logRequest(r, w, status)
     io.WriteString(w, content)
 }
 
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/plain")
-    send(r, w, "Hello world")
+    sendOK(r, w, "Hello world")
 }
 
 func helloHTML(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/html")
-    send(r, w, "<h1>Hello world</h1>")
+    sendOK(r, w, "<h1>Hello world</h1>")
 }
 
 func helloJSON(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
-    send(r, w, "{\"hello\": \"world\"}")
+    sendOK(r, w, "{\"hello\": \"world\"}")
 }
 
 func error(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusNotFound)
-    send(r, w, "<h1>Not found</h1>")
+    send(r, w, http.StatusNotFound, "<h1>Not found</h1>")
 }
