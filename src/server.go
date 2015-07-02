@@ -74,7 +74,6 @@ func helloHTML(w http.ResponseWriter, r *http.Request) {
 }
 
 func helloJSON(w http.ResponseWriter, r *http.Request) {
-    //w.Header().Set("Content-Type", "application/json")
     setContentType(w, "json")
     sendOK(r, w, "{\"hello\": \"world\"}")
 }
