@@ -31,6 +31,7 @@ func main() {
     
     handlers["/"] = hello
     handlers["/html"] = helloHTML
+    handlers["/json"] = helloJSON
     server.ListenAndServe()
 }
 
@@ -41,12 +42,20 @@ func logRequest(r *http.Request) {
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
     logRequest(r)
+    w.Header.Set("Content-Type", "text/plain")
     io.WriteString(w, "Hello world")
 }
 
 func helloHTML(w http.ResponseWriter, r *http.Request) {
     logRequest(r)
+    w.Header().Set("Content-Type", "text/html")
     io.WriteString(w, "<h1>Hello world</h1>")
+}
+
+func helloJSON(w http.ResponseWriter, r *http.Request) {
+    logRequest(r)
+    w.Header().Set("Content-Type", "application/json")
+    io.WriteString(w, "{\"hello\": \"world\"}")
 }
 
 func error(w http.ResponseWriter, r *http.Request) {
