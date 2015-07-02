@@ -18,6 +18,7 @@ type Handler struct {}
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if handle, ok := handlers[r.URL.String()]; ok {
         handle(w, r)
+        
         return
     }
     
