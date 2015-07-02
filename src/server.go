@@ -10,7 +10,7 @@ import (
 const NIC string = "0.0.0.0"
 const PORT int = 8000
 
-var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter, 
+var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter,
     *http.Request))
 
 type Handler struct {}
@@ -18,17 +18,17 @@ type Handler struct {}
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if handle, ok := handlers[r.URL.String()]; ok {
         handle(w, r)
-        
+
         return
     }
-    
+
     error(w, r)
 }
 
 func main() {
     log.Printf("Running server %s:%d\n", NIC, PORT)
     server := http.Server{Addr: NIC + ":" + strconv.Itoa(PORT), Handler: &Handler{}}
-    
+
     handlers["/"] = hello
     handlers["/html"] = helloHTML
     handlers["/json"] = helloJSON
@@ -48,6 +48,20 @@ func send(r *http.Request, w http.ResponseWriter, status int, content string) {
     io.WriteString(w, content)
 }
 
+func setContentType(w http.ResponseWriter, contentType string) {
+    var cType string
+
+    switch (contentType) {
+        case "json":
+            cType = "application/json"
+            break
+        default:
+            break
+    }
+
+    w.Header().Set("Content-Type", cType)
+}
+
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "text/plain")
@@ -60,7 +74,8 @@ func helloHTML(w http.ResponseWriter, r *http.Request) {
 }
 
 func helloJSON(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
+    //w.Header().Set("Content-Type", "application/json")
+    setContentType(w, "json")
     sendOK(r, w, "{\"hello\": \"world\"}")
 }
 
