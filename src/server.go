@@ -55,6 +55,12 @@ func setContentType(w http.ResponseWriter, contentType string) {
         case "json":
             cType = "application/json"
             break
+        case "html":
+            cType = "text/html"
+            break
+        case "plain":
+            cType = "text/plain"
+            break
         default:
             break
     }
@@ -64,12 +70,12 @@ func setContentType(w http.ResponseWriter, contentType string) {
 
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/plain")
+    setContentType(w, "plain")
     sendOK(r, w, "Hello world")
 }
 
 func helloHTML(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/html")
+    setContentType(w, "html")
     sendOK(r, w, "<h1>Hello world</h1>")
 }
 
@@ -79,7 +85,7 @@ func helloJSON(w http.ResponseWriter, r *http.Request) {
 }
 
 func error(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/html")
+    setContentType(w, "html")
     w.WriteHeader(http.StatusNotFound)
     send(r, w, http.StatusNotFound, "<h1>Not found</h1>")
 }
