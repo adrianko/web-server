@@ -61,9 +61,8 @@ func setContentType(w http.ResponseWriter, contentType string) {
             cType = "text/html"
             break
         case "plain":
-            cType = "text/plain"
-            break
         default:
+            cType = "text/plain"
             break
     }
 
