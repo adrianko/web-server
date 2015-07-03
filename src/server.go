@@ -44,6 +44,7 @@ func sendOK(r *http.Request, w http.ResponseWriter, content string) {
 }
 
 func send(r *http.Request, w http.ResponseWriter, status int, content string) {
+    w.WriteHeader(status)
     logRequest(r, w, status)
     io.WriteString(w, content)
 }
@@ -86,6 +87,5 @@ func helloJSON(w http.ResponseWriter, r *http.Request) {
 
 func error(w http.ResponseWriter, r *http.Request) {
     setContentType(w, "html")
-    w.WriteHeader(http.StatusNotFound)
     send(r, w, http.StatusNotFound, "<h1>Not found</h1>")
 }
