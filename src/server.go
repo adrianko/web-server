@@ -39,11 +39,12 @@ func logRequest(r *http.Request, w http.ResponseWriter, status int) {
     log.Printf("%d %s: %s", status, r.Method, r.URL.String())
 }
 
-func sendOK(r *http.Request, w http.ResponseWriter, content string) {
-    send(r, w, http.StatusOK, content)
+func sendOK(r *http.Request, w http.ResponseWriter, contentType string, content string) {
+    send(r, w, http.StatusOK, contentType, content)
 }
 
-func send(r *http.Request, w http.ResponseWriter, status int, content string) {
+func send(r *http.Request, w http.ResponseWriter, status int, contentType string, content string) {
+    setContentType(w, contentType)
     w.WriteHeader(status)
     logRequest(r, w, status)
     io.WriteString(w, content)
@@ -71,21 +72,17 @@ func setContentType(w http.ResponseWriter, contentType string) {
 
 //handlers
 func hello(w http.ResponseWriter, r *http.Request) {
-    setContentType(w, "plain")
-    sendOK(r, w, "Hello world")
+    sendOK(r, w, "plain", "Hello world")
 }
 
 func helloHTML(w http.ResponseWriter, r *http.Request) {
-    setContentType(w, "html")
-    sendOK(r, w, "<h1>Hello world</h1>")
+    sendOK(r, w, "html", "<h1>Hello world</h1>")
 }
 
 func helloJSON(w http.ResponseWriter, r *http.Request) {
-    setContentType(w, "json")
-    sendOK(r, w, "{\"hello\": \"world\"}")
+    sendOK(r, w, "json", "{\"hello\": \"world\"}")
 }
 
 func error(w http.ResponseWriter, r *http.Request) {
-    setContentType(w, "html")
-    send(r, w, http.StatusNotFound, "<h1>Not found</h1>")
+    send(r, w, http.StatusNotFound, "html", "<h1>Not found</h1>")
 }
