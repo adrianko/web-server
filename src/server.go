@@ -5,16 +5,16 @@ import (
     "io/ioutil"
     "log"
     "net/http"
-    "strconv"
+	"strings"
+	"fmt"
 )
 
-const NIC string = "0.0.0.0"
-const PORT int = 8000
+var configuration map[string]string = make(map[string]string)
 
 var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter,
     *http.Request))
 
-type Handler struct{}
+type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if handle, ok := handlers[r.URL.String()]; ok {
@@ -35,14 +35,20 @@ func check(e error) {
 func main() {
     data, err := ioutil.ReadFile("../conf/config")
     check(err)
-    log.Print(string(data))
-    log.Printf("Running server %s:%d\n", NIC, PORT)
-    server := http.Server{Addr: NIC + ":" + strconv.Itoa(PORT), Handler: &Handler{}}
+    parseConfig(strings.Split(string(data), "\n"))
+    //log.Printf("Running server %s:%d\n", configuration["interface"], configutation["port"])
+    //server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
 
-    handlers["/"] = hello
-    handlers["/html"] = helloHTML
-    handlers["/json"] = helloJSON
-    server.ListenAndServe()
+    //handlers["/"] = hello
+    //handlers["/html"] = helloHTML
+    //handlers["/json"] = helloJSON
+    //server.ListenAndServe()
+}
+
+func parseConfig(config []string) {
+	for _, c := range config {
+		fmt.Println(c)
+	}
 }
 
 func logRequest(r *http.Request, w http.ResponseWriter, status int) {
