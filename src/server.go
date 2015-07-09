@@ -35,7 +35,7 @@ func check(e error) {
 func main() {
     data, err := ioutil.ReadFile("../conf/config")
     check(err)
-    parseConfig(strings.Split(string(data), "\n"))
+    parseConfig(string(data))
     //log.Printf("Running server %s:%d\n", configuration["interface"], configutation["port"])
     //server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
 
@@ -45,8 +45,8 @@ func main() {
     //server.ListenAndServe()
 }
 
-func parseConfig(config []string) {
-	for _, c := range config {
+func parseConfig(config string) {
+	for _, c := range strings.Split(config, "\n") {
 		fmt.Println(c)
 	}
 }
