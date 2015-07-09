@@ -6,7 +6,6 @@ import (
     "log"
     "net/http"
 	"strings"
-	"fmt"
 )
 
 var configuration map[string]string = make(map[string]string)
@@ -36,18 +35,19 @@ func main() {
     data, err := ioutil.ReadFile("../conf/config")
     check(err)
     parseConfig(string(data))
-    //log.Printf("Running server %s:%d\n", configuration["interface"], configutation["port"])
-    //server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
+    log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
+    server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
 
-    //handlers["/"] = hello
-    //handlers["/html"] = helloHTML
-    //handlers["/json"] = helloJSON
-    //server.ListenAndServe()
+    handlers["/"] = hello
+    handlers["/html"] = helloHTML
+    handlers["/json"] = helloJSON
+    server.ListenAndServe()
 }
 
 func parseConfig(config string) {
 	for _, c := range strings.Split(config, "\n") {
-		fmt.Println(c)
+		line := strings.Split(c, "=")
+		configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
 	}
 }
 
