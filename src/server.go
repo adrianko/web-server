@@ -15,18 +15,16 @@ var configuration map[string]string = make(map[string]string)
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    if root, ok := configuration["root"]; ok {
-        files, err := ioutil.ReadDir(root)
-        
-        if err != nil {
-            log.Fatal(err)
-        }
-        
-        fmt.Println(r.URL.String())
-        
-        for _, file := range files {
-            fmt.Println(file.Name())
-        }
+    files, err := ioutil.ReadDir(configuration["root"])
+    
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    fmt.Println(r.URL.String())
+    
+    for _, file := range files {
+        fmt.Println(file.Name())
     }
     
     w.Header().Set("Content-Type", "")
@@ -43,6 +41,8 @@ func parse_config(config string) {
         if _, err := os.Stat(root); os.IsNotExist(err) {
             log.Fatal("Root path does not exist.")
         }
+    } else {
+        configuration["root"] = "/var/www" // default value
     }
 }
 
