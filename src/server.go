@@ -6,7 +6,6 @@ import (
     "log"
     "net/http"
     "strings"
-    "path/filepath"
     "fmt"
 )
 
@@ -15,10 +14,13 @@ var configuration map[string]string = make(map[string]string)
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    if val, ok := configuration["root"]; ok {
-        files, err := filepath.Glob(val)
+    if root, ok := configuration["root"]; ok {
+        files, err := ioutil.ReadDir(root)
         check(err)
-        fmt.Println(files)    
+        
+        for _, file := range files {
+            fmt.Println(file.Name())
+        }
     }
     
     w.Header().Set("Content-Type", "")
