@@ -17,7 +17,11 @@ type Handler struct {}
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if root, ok := configuration["root"]; ok {
         files, err := ioutil.ReadDir(root)
-        check(err)
+        
+        if err != nil {
+            log.Fatal(err)
+        }
+        
         fmt.Println(r.URL.String())
         
         for _, file := range files {
@@ -27,12 +31,6 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     
     w.Header().Set("Content-Type", "")
     send(r, w, 404, "Hello, world")
-}
-
-func check(e error) {
-    if e != nil {
-        panic(e)
-    }
 }
 
 func parse_config(config string) {
@@ -66,7 +64,11 @@ func start_server() {
 
 func main() {
     data, err := ioutil.ReadFile("../conf/config")
-    check(err)
+    
+    if err != nil {
+        log.Fatal(err)
+    }
+    
     parse_config(string(data))
     start_server()
 }
