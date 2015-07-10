@@ -5,7 +5,7 @@ import (
     "io/ioutil"
     "log"
     "net/http"
-	"strings"
+    "strings"
     "path/filepath"
     "fmt"
 )
@@ -44,10 +44,10 @@ func check(e error) {
 }
 
 func parse_config(config string) {
-	for _, c := range strings.Split(config, "\n") {
-		line := strings.Split(c, "=")
-		configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
-	}
+    for _, c := range strings.Split(config, "\n") {
+        line := strings.Split(c, "=")
+        configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
+    }
 }
 
 func log_request(r *http.Request, w http.ResponseWriter, status int) {
