@@ -43,8 +43,7 @@ func parse_config(config string) {
     
     if root, ok := configuration["root"]; ok {
         if _, err := os.Stat(root); os.IsNotExist(err) {
-            log.Printf("Root path does not exist.")
-            os.Exit(1)
+            log.Fatal("Root path does not exist.")
         }
     }
 }
@@ -63,7 +62,7 @@ func main() {
     data, err := ioutil.ReadFile("../conf/config")
     check(err)
     parse_config(string(data))
-    log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
     server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
-    server.ListenAndServe()
+    log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
+    log.Fatal(server.ListenAndServe())
 }
