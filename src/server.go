@@ -12,9 +12,6 @@ import (
 
 var configuration map[string]string = make(map[string]string)
 
-var handlers map[string]func(http.ResponseWriter, *http.Request) = make(map[string]func(http.ResponseWriter,
-    *http.Request))
-
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
