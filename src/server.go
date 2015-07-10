@@ -63,7 +63,13 @@ func start_server() {
 }
 
 func main() {
-    data, err := ioutil.ReadFile("../conf/config")
+    var config_file string = "/etc/maester-http"
+    
+    if len(os.Args) > 1 {
+        config_file = os.Args[1]
+    }
+    
+    data, err := ioutil.ReadFile(config_file)
     
     if err != nil {
         log.Fatal(err)
