@@ -58,11 +58,15 @@ func send(r *http.Request, w http.ResponseWriter, status int, content string) {
     io.WriteString(w, content)
 }
 
+func start_server() {
+    server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
+    log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
+    log.Fatal(server.ListenAndServe())
+}
+
 func main() {
     data, err := ioutil.ReadFile("../conf/config")
     check(err)
     parse_config(string(data))
-    server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
-    log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
-    log.Fatal(server.ListenAndServe())
+    start_server()
 }
