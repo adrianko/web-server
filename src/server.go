@@ -10,6 +10,8 @@ import (
     "os"
 )
 
+var config_file string = "/etc/maester-http"
+
 var configuration map[string]string = make(map[string]string)
 
 type Handler struct {}
@@ -63,8 +65,6 @@ func start_server() {
 }
 
 func main() {
-    var config_file string = "/etc/maester-http"
-    
     if len(os.Args) > 1 {
         config_file = os.Args[1]
     }
