@@ -25,11 +25,7 @@ type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     files, err := ioutil.ReadDir(configuration["root"])
-    
-    if err != nil {
-        log.Fatal(err)
-    }
-    
+    check(err)
     fmt.Println(r.URL.String())
     
     for _, file := range files {
