@@ -79,17 +79,19 @@ func start_server() {
     log.Fatal(server.ListenAndServe())
 }
 
+func check(err error) {
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+
 func main() {
     if len(os.Args) > 1 {
         config_file = os.Args[1]
     }
     
     data, err := ioutil.ReadFile(config_file)
-    
-    if err != nil {
-        log.Fatal(err)
-    }
-    
+    check(err)
     parse_config(string(data))
     start_server()
 }
