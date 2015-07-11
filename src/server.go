@@ -42,8 +42,10 @@ func parse_config(config string) {
         configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
     }
     
-    for _, p := range []string{"root", "port", "interface"} {
-        check_default(p)
+    for p, _ := range configuration_default {
+        if p != "config_file" {
+            check_default(p)
+        }
     }
     
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
