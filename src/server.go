@@ -36,8 +36,14 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func parse_config(config string) {
     for _, c := range strings.Split(config, "\n") {
-        line := strings.Split(c, "=")
-        configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
+        if strings.HasPrefix(c, "#") || strings.HasPrefix(c, ";") {
+            continue
+        }
+        
+        if strings.Contains(c, "=") {
+            line := strings.Split(c, "=")
+            configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
+        }
     }
     
     for p, _ := range configuration_default {
