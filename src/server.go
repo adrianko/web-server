@@ -12,12 +12,11 @@ import (
 
 var configuration_default = map[string]string{
     "root": "/var/www",
-    "config_file": "/etc/maester-http",
     "port": "80",
     "interface": "0.0.0.0",
 }
 
-var config_file string = configuration_default["config_file"]
+var config_file string = "/etc/maester-http"
 
 var configuration map[string]string = make(map[string]string)
 
@@ -43,9 +42,7 @@ func parse_config(config string) {
     }
     
     for p, _ := range configuration_default {
-        if p != "config_file" {
-            check_default(p)
-        }
+        check_default(p)
     }
     
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
