@@ -57,14 +57,10 @@ func parse_config(config string) {
     }
 }
 
-func log_request(r *http.Request, w http.ResponseWriter, status int) {
-    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
-}
-
 func send(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
     w.Header().Set("Content-Type", content_type)
     w.WriteHeader(status)
-    log_request(r, w, status)
+    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
 }
 
