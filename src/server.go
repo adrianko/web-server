@@ -42,16 +42,13 @@ func parse_config(config string) {
         configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
     }
     
-    if root, ok := configuration["root"]; ok {
-        if _, err := os.Stat(root); os.IsNotExist(err) {
-            log.Fatal("Root path does not exist.")
-        }
-    } else {
-        configuration["root"] = configuration_default["root"] // default value
+    for _, p := range []string{"root", "port", "interface"} {
+        check_default(p)
     }
     
-    check_default("port")
-    check_default("interface")
+    if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
+        log.Fatal("Root path does not exist.")
+    }
 }
 
 func check_default(property string) {
