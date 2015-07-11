@@ -10,7 +10,14 @@ import (
     "os"
 )
 
-var config_file string = "/etc/maester-http"
+var configuration_default = map[string]string{
+    "root": "/var/www",
+    "config_file": "/etc/maester-http",
+    "port": "80",
+    "interface": "0.0.0.0",
+}
+
+var config_file string = configuration_default["config_file"]
 
 var configuration map[string]string = make(map[string]string)
 
@@ -44,7 +51,15 @@ func parse_config(config string) {
             log.Fatal("Root path does not exist.")
         }
     } else {
-        configuration["root"] = "/var/www" // default value
+        configuration["root"] = configuration_default["root"] // default value
+    }
+    
+    if _, ok := configuration["port"]; !ok {
+        configuration["port"] = configuration_default["port"]
+    }
+    
+    if _, ok := configuration["interface"]; !ok {
+        configuration["interface"] = configuration_default["interface"]
     }
 }
 
