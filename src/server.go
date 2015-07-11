@@ -41,17 +41,13 @@ func parse_config(config string) {
     }
     
     for p, _ := range configuration_default {
-        check_default(p)
+        if _, ok := configuration[p]; !ok {
+            configuration[p] = configuration_default[p]
+        }
     }
     
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
         log.Fatal("Root path does not exist.")
-    }
-}
-
-func check_default(property string) {
-    if _, ok := configuration[property]; !ok {
-        configuration[property] = configuration_default[property]
     }
 }
 
