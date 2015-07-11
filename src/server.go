@@ -50,12 +50,13 @@ func parse_config(config string) {
         configuration["root"] = configuration_default["root"] // default value
     }
     
-    if _, ok := configuration["port"]; !ok {
-        configuration["port"] = configuration_default["port"]
-    }
-    
-    if _, ok := configuration["interface"]; !ok {
-        configuration["interface"] = configuration_default["interface"]
+    check_default("port")
+    check_default("interface")
+}
+
+func check_default(property string) {
+    if _, ok := configuration[property]; !ok {
+        configuration[property] = configuration_default[property]
     }
 }
 
