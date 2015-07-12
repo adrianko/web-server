@@ -6,8 +6,8 @@ import (
     "log"
     "net/http"
     "strings"
-    "fmt"
     "os"
+    "mime"
 )
 
 var configuration_default = map[string]string{
@@ -23,15 +23,25 @@ var configuration map[string]string = make(map[string]string)
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    files, err := ioutil.ReadDir(configuration["root"])
-    check(err)
-    url := strings.Split(strings.Trim(r.URL.String(), "/"), "/")
-    fmt.Println(url)
-    for _, file := range files {
-        fmt.Println(file.Name())
+    static_file := configuration["root"] + r.URL.String()
+    
+    if _, err := os.Stat(static_file); os.IsNotExist(err) {
+        //file doesn't exist
+        send(r, w, 404, "text/plain", "404: Not found")
+        return
     }
     
-    send(r, w, 404, "", "Hello, world")
+    data, err := ioutil.ReadFile(static_file)
+    
+    if err != nil {
+        log.Printf("Could not read file: " + static_file)
+        return
+    }
+    
+    filePath := strings.Split(static_file, "/")
+    fileName := strings.Split(filePath[len(filePath) - 1], ".")
+    ext := "." + fileName[len(fileName) - 1]
+    send(r, w, 200, mime.TypeByExtension(ext), string(data))
 }
 
 func load_config() {
@@ -62,6 +72,7 @@ func parse_config(config string) {
 }
 
 func validate_config() {
+    // validate web root
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
         log.Fatal("Root path does not exist.")
     }
