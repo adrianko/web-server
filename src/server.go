@@ -10,15 +10,13 @@ import (
     "mime"
 )
 
-var configuration_default = map[string]string{
+var config_file string = "/etc/maester-http"
+
+var configuration map[string]string = map[string]string{
     "root": "/var/www",
     "port": "80",
     "interface": "0.0.0.0",
 }
-
-var config_file string = "/etc/maester-http"
-
-var configuration map[string]string = make(map[string]string)
 
 type Handler struct {}
 
@@ -62,12 +60,6 @@ func parse_config(config string) {
         if strings.Contains(c, "=") {
             line := strings.Split(c, "=")
             configuration[strings.TrimSpace(line[0])] = strings.TrimSpace(line[1])
-        }
-    }
-    
-    for p, _ := range configuration_default {
-        if _, ok := configuration[p]; !ok {
-            configuration[p] = configuration_default[p]
         }
     }
     
