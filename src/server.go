@@ -25,6 +25,10 @@ type Handler struct {}
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     static_file := configuration["root"] + r.URL.String()
     
+    if strings.HasSuffix(static_file, "/") {
+        static_file += "index.html"
+    }
+    
     if _, err := os.Stat(static_file); os.IsNotExist(err) {
         //file doesn't exist
         send(r, w, 404, "text/plain", "404: Not found")
@@ -38,8 +42,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    filePath := strings.Split(static_file, "/")
-    fileName := strings.Split(filePath[len(filePath) - 1], ".")
+    fileName := strings.Split(static_file, ".")
     ext := "." + fileName[len(fileName) - 1]
     send(r, w, 200, mime.TypeByExtension(ext), string(data))
 }
