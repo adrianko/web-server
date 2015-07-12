@@ -33,16 +33,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    data, err := ioutil.ReadFile(static_file)
-    
-    if err != nil {
-        log.Printf("Could not read file: " + static_file)
-        return
-    }
-    
-    fileName := strings.Split(static_file, ".")
-    ext := "." + fileName[len(fileName) - 1]
-    send(r, w, 200, mime.TypeByExtension(ext), string(data))
+    send(r, w, static_file)
 }
 
 func load_config() {
@@ -73,11 +64,24 @@ func validate_config() {
     }
 }
 
-func send(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
+func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
     w.Header().Set("Content-Type", content_type)
     w.WriteHeader(status)
     log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
+}
+
+func send(r *http.Request, w http.ResponseWriter, static_file string) {
+    data, err := ioutil.ReadFile(static_file)
+    
+    if err != nil {
+        log.Printf("Could not read file: " + static_file)
+        return
+    }
+    
+    fileName := strings.Split(static_file, ".")
+    ext := "." + fileName[len(fileName) - 1]
+    send_response(r, w, 200, mime.TypeByExtension(ext), string(data))
 }
 
 func start_server() {
