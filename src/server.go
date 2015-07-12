@@ -34,6 +34,12 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     send(r, w, 404, "", "Hello, world")
 }
 
+func load_config() {
+    data, err := ioutil.ReadFile(config_file)
+    check(err)
+    parse_config(string(data))
+}
+
 func parse_config(config string) {
     for _, c := range strings.Split(config, "\n") {
         if strings.HasPrefix(c, "#") || strings.HasPrefix(c, ";") {
@@ -52,6 +58,10 @@ func parse_config(config string) {
         }
     }
     
+    validate_config()
+}
+
+func validate_config() {
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
         log.Fatal("Root path does not exist.")
     }
@@ -67,7 +77,7 @@ func send(r *http.Request, w http.ResponseWriter, status int, content_type strin
 func start_server() {
     server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
     log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
-    log.Fatal(server.ListenAndServe())
+    check(server.ListenAndServe())
 }
 
 func check(err error) {
@@ -81,8 +91,6 @@ func main() {
         config_file = os.Args[1]
     }
     
-    data, err := ioutil.ReadFile(config_file)
-    check(err)
-    parse_config(string(data))
+    load_config()
     start_server()
 }
