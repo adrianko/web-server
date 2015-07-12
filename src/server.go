@@ -23,7 +23,7 @@ var index_files []string = []string{"index.html", "index.htm"}
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    if valid, path := valid_file(configuration["root"] + r.URL.String()); valid {
+    if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send(r, w, path)
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
@@ -58,8 +58,8 @@ func validate_config() {
     }
 }
 
-func valid_file(path string) (bool, string) {
-    if info, err := os.Stat(path); err == nil && !info.IsDir() {
+func valid_path(path string) (bool, string) {
+    if valid_file(path) {
         return true, path
     }
     
@@ -68,7 +68,7 @@ func valid_file(path string) (bool, string) {
     }
     
     if !strings.HasSuffix(path, "/") && !strings.HasSuffix(path, "index.html") {
-        return valid_file(path + "/")
+        return valid_path(path + "/")
     }
     
     return false, path
@@ -77,7 +77,7 @@ func valid_file(path string) (bool, string) {
 func valid_index(path string) (bool, string) {
     if strings.HasSuffix(path, "/") {
         for _, in := range index_files {
-            if info, err := os.Stat(path + in); err == nil && !info.IsDir() {
+            if valid_file(path + in) {
                 return true, path + in
             }
         }
@@ -86,6 +86,14 @@ func valid_index(path string) (bool, string) {
     }
         
     return valid_index(path + "/")
+}
+
+func valid_file(path string) bool {
+    if info, err := os.Stat(path); err == nil && !info.IsDir() {
+        return true
+    }
+    
+    return false
 }
 
 func send(r *http.Request, w http.ResponseWriter, static_file string) {
