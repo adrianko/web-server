@@ -21,19 +21,11 @@ var configuration map[string]string = map[string]string{
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    static_file := configuration["root"] + r.URL.String()
-    
-    if strings.HasSuffix(static_file, "/") {
-        static_file += "index.html"
+    if valid, path := valid_file(configuration["root"] + r.URL.String()); valid {
+        send(r, w, path)
+    } else {
+        send_response(r, w, 404, "text/plain", "404: Not found")
     }
-    
-    if _, err := os.Stat(static_file); os.IsNotExist(err) {
-        //file doesn't exist
-        send(r, w, 404, "text/plain", "404: Not found")
-        return
-    }
-    
-    send(r, w, static_file)
 }
 
 func load_config() {
@@ -64,11 +56,20 @@ func validate_config() {
     }
 }
 
-func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
-    w.Header().Set("Content-Type", content_type)
-    w.WriteHeader(status)
-    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
-    io.WriteString(w, content)
+func valid_file(path string) (bool, string) {
+    if info, err := os.Stat(path); err == nil && !info.IsDir() {
+        return true, path
+    }
+    
+    if strings.HasSuffix(path, "/") {
+        return valid_file(path + "index.html")
+    }
+    
+    if !strings.HasSuffix(path, "/") && !strings.HasSuffix(path, "index.html") {
+        return valid_file(path + "/")
+    }
+    
+    return false, path
 }
 
 func send(r *http.Request, w http.ResponseWriter, static_file string) {
@@ -82,6 +83,13 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
     fileName := strings.Split(static_file, ".")
     ext := "." + fileName[len(fileName) - 1]
     send_response(r, w, 200, mime.TypeByExtension(ext), string(data))
+}
+
+func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
+    w.Header().Set("Content-Type", content_type)
+    w.WriteHeader(status)
+    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
+    io.WriteString(w, content)
 }
 
 func start_server() {
