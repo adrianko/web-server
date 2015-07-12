@@ -42,7 +42,7 @@ func parse_config(config string) {
         
         if strings.Contains(c, "=") {
             line := strings.Split(c, "=")
-            configuration[strings.Trim(line[0], " ")] = strings.Trim(line[1], " ")
+            configuration[strings.TrimSpaceline[0])] = strings.TrimSpace(line[1])
         }
     }
     
