@@ -18,6 +18,8 @@ var configuration map[string]string = map[string]string{
     "interface": "0.0.0.0",
 }
 
+var index_files []string = []string{"index.html", "index.htm"} 
+
 type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +64,7 @@ func valid_file(path string) (bool, string) {
     }
     
     if strings.HasSuffix(path, "/") {
-        return valid_file(path + "index.html")
+        return valid_index(path)
     }
     
     if !strings.HasSuffix(path, "/") && !strings.HasSuffix(path, "index.html") {
@@ -70,6 +72,20 @@ func valid_file(path string) (bool, string) {
     }
     
     return false, path
+}
+
+func valid_index(path string) (bool, string) {
+    if strings.HasSuffix(path, "/") {
+        for _, in := range index_files {
+            if info, err := os.Stat(path + in); err == nil && !info.IsDir() {
+                return true, path + in
+            }
+        }
+        
+        return false, path
+    }
+        
+    return valid_index(path + "/")
 }
 
 func send(r *http.Request, w http.ResponseWriter, static_file string) {
