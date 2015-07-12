@@ -16,9 +16,10 @@ var configuration map[string]string = map[string]string{
     "root": "/var/www",
     "port": "80",
     "interface": "0.0.0.0",
+    "index": "index.html",
 }
 
-var index_files []string = []string{"index.html", "index.htm"} 
+var index_files []string = []string{}
 
 type Handler struct {}
 
@@ -55,6 +56,10 @@ func validate_config() {
     // validate web root
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
         log.Fatal("Root path does not exist.")
+    }
+    
+    for _, in := range strings.Split(configuration["index"], " ") {
+        index_files = append(index_files, strings.TrimSpace(in))
     }
 }
 
