@@ -27,7 +27,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send(r, w, path)
     } else {
-        send_response(r, w, 404, "text/plain", "404: Not found")
+        send_not_found(r, w)
     }
 }
 
@@ -109,9 +109,19 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
         return
     }
     
-    fileName := strings.Split(static_file, ".")
-    ext := "." + fileName[len(fileName) - 1]
-    send_response(r, w, 200, mime.TypeByExtension(ext), string(data))
+    filePath := strings.Split(static_file, "/")
+    
+    if !strings.HasPrefix(filePath[len(filePath) - 1], ".") {
+        fileName := strings.Split(filePath[len(filePath) - 1], ".")
+        ext := "." + fileName[len(fileName) - 1]
+        send_response(r, w, 200, mime.TypeByExtension(ext), string(data))
+    } else {
+        send_not_found(r, w)
+    }
+}
+
+func send_not_found(r *http.Request, w http.ResponseWriter) {
+    send_response(r, w, 404, "text/plain", "404: Not found")
 }
 
 func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
