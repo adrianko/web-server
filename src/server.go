@@ -31,6 +31,12 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func read_args() {
+    if len(os.Args) > 1 {
+        config_file = os.Args[1]
+    }
+}
+
 func load_config() {
     data, err := ioutil.ReadFile(config_file)
     check(err)
@@ -152,10 +158,7 @@ func check(err error) {
 }
 
 func main() {
-    if len(os.Args) > 1 {
-        config_file = os.Args[1]
-    }
-
+    read_args()
     load_config()
     start_server()
 }
