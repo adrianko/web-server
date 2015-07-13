@@ -75,6 +75,7 @@ func valid_path(path string) (bool, string) {
     if !strings.HasSuffix(path, "/") && !strings.HasSuffix(path, "index.html") {
         return valid_path(path + "/")
     }
+
     return false, path
 }
 
@@ -105,6 +106,7 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
 
     if err != nil {
         log.Printf("Could not read file: " + static_file)
+        send_locked(r, w)
         return
     }
 
@@ -123,8 +125,15 @@ func send_not_found(r *http.Request, w http.ResponseWriter) {
     send_response(r, w, 404, "text/plain", "404: Not found")
 }
 
+func send_locked(r *http.Request, w http.ResponseWriter) {
+    send_response(r, w, 423, "", "")
+}
+
 func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
-    w.Header().Set("Content-Type", content_type)
+    if content_type != "" {
+        w.Header().Set("Content-Type", content_type)
+    }
+
     w.WriteHeader(status)
     log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
