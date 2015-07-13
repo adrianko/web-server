@@ -49,9 +49,10 @@ func parse_config(config string) {
             continue
         }
 
-        if strings.Contains(c, "=") {
-            line := strings.Split(c, "=")
-            configuration[strings.TrimSpace(line[0])] = strings.TrimSpace(line[1])
+        if strings.Contains(c, " ") {
+            property := string([]rune(c)[0:strings.Index(c, " ")])
+            value := string([]rune(c)[strings.Index(c, " "):len(c)])
+            configuration[strings.TrimSpace(property)] = strings.TrimSpace(value)
         }
     }
 
