@@ -9,7 +9,9 @@ import (
     "os"
     "strings"
 )
-
+/**
+ * TODO File index on directory
+ */
 var config_file string = "/etc/maester-http"
 
 var configuration map[string]string = map[string]string{
