@@ -19,6 +19,7 @@ var configuration map[string]string = map[string]string{
     "port":      "80",
     "interface": "0.0.0.0",
     "index":     "index.html",
+    "error404":  "error/404.html",
 }
 
 var index_files []string = []string{}
