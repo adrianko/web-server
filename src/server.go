@@ -19,7 +19,7 @@ var configuration map[string]string = map[string]string{
     "port":      "80",
     "interface": "0.0.0.0",
     "index":     "index.html",
-    "error404":  "error/404.html",
+    "error404":  "/error/404.html",
 }
 
 var index_files []string = []string{}
@@ -132,7 +132,24 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
 }
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
-    send_response(r, w, 404, "text/plain", "404: Not found")
+    file404 := configuration["root"] + configuration["error404"]
+    
+    if valid_file(file404) {
+        data, err := ioutil.ReadFile(file404)
+            
+        if err != nil {
+            log.Printf("Could not read file: " + file404)
+            send_locked(r, w)
+            return
+        }
+
+        filePath := strings.Split(file404, "/")
+        fileName := strings.Split(filePath[len(filePath)-1], ".")
+        ext := "." + fileName[len(fileName)-1]
+        send_response(r, w, 404, mime.TypeByExtension(ext), string(data))
+    } else {
+        send_response(r, w, 404, "text/plain", "404: Not found")
+    }
 }
 
 func send_locked(r *http.Request, w http.ResponseWriter) {
