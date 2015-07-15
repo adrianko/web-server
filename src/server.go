@@ -47,14 +47,14 @@ func load_config() {
 }
 
 func parse_config(config string) {
-    for _, c := range strings.Split(config, "\n") {
-        if strings.HasPrefix(c, "#") || strings.HasPrefix(c, ";") {
+    for _, conf_line := range strings.Split(config, "\n") {
+        if strings.HasPrefix(conf_line, "#") || strings.HasPrefix(conf_line, ";") {
             continue
         }
 
-        if strings.Contains(c, " ") {
-            property := strings.TrimSpace(string(c[0:strings.Index(c, " ")]))
-            value := strings.TrimSpace(string(c[strings.Index(c, " "):len(c)]))
+        if strings.Contains(conf_line, " ") {
+            property := strings.TrimSpace(string(conf_line[0:strings.Index(conf_line, " ")]))
+            value := strings.TrimSpace(string(conf_line[strings.Index(conf_line, " "):len(conf_line)]))
             configuration[property] = value
         }
     }
