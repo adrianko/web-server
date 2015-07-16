@@ -20,7 +20,7 @@ var configuration map[string]string = map[string]string{
     "port":      "80",
     "interface": "0.0.0.0",
     "index":     "index.html",
-    "error404":  "/error/404.html",
+    "error404":  "/error/error404.html",
 }
 
 var index_files []string = []string{}
@@ -69,8 +69,21 @@ func validate_config() {
         log.Fatal("Root path does not exist.")
     }
 
+    // create list of possible index files
     for _, in := range strings.Split(configuration["index"], " ") {
         index_files = append(index_files, strings.TrimSpace(in))
+    }
+    
+    // validate error file on load instead of per Request
+    err_file := configuration["error404"]
+    configuration["error404"] = ""
+    
+    if valid_file(configuration["root"] + err_file) {    
+        _, err := ioutil.ReadFile(configuration["root"] + err_file)
+            
+        if err == nil {
+            configuration["error404"] = err_file
+        }
     }
 }
 
@@ -155,18 +168,9 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
 }
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
-    file404 := configuration["root"] + configuration["error404"]
-    
-    if valid_file(file404) {
-        data, err := ioutil.ReadFile(file404)
-            
-        if err != nil {
-            log.Printf("Could not read file: " + file404)
-            send_locked(r, w)
-            return
-        }
-
-        send_response(r, w, 404, mime.TypeByExtension(get_extension(file404)), string(data))
+    if configuration["error404"] != "" {
+        data, _ := ioutil.ReadFile(configuration["root"] + configuration["error404"])
+        send_response(r, w, 404, mime.TypeByExtension(get_extension(configuration["error404"])), string(data))
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
     }
