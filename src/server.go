@@ -118,6 +118,14 @@ func valid_file(path string) bool {
     return false
 }
 
+func get_extension(file string) string {
+    
+}
+
+func get_file(path string) string {
+    
+}
+
 func send(r *http.Request, w http.ResponseWriter, static_file string) {
     data, err := ioutil.ReadFile(static_file)
 
