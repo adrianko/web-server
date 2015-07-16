@@ -127,7 +127,7 @@ func get_extension(file string) string {
         return ""
     }
     
-    fileName := strings.Split(filePath[len(filePath) - 1], ".")
+    fileName := strings.Split(file, ".")
 
     return "." + fileName[len(fileName) - 1]
 }
@@ -146,13 +146,9 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
         send_locked(r, w)
         return
     }
-
-    filePath := strings.Split(static_file, "/")
-
-    if !strings.HasPrefix(filePath[len(filePath) - 1], ".") {
-        fileName := strings.Split(filePath[len(filePath) - 1], ".")
-        ext := "." + fileName[len(fileName) - 1]
-        send_response(r, w, 200, mime.TypeByExtension(ext), string(data))
+    
+    if valid_file(static_file) {
+        send_response(r, w, 200, mime.TypeByExtension(get_extension(static_file)), string(data))
     } else {
         send_not_found(r, w)
     }
@@ -170,10 +166,7 @@ func send_not_found(r *http.Request, w http.ResponseWriter) {
             return
         }
 
-        filePath := strings.Split(file404, "/")
-        fileName := strings.Split(filePath[len(filePath) - 1], ".")
-        ext := "." + fileName[len(fileName) - 1]
-        send_response(r, w, 404, mime.TypeByExtension(ext), string(data))
+        send_response(r, w, 404, mime.TypeByExtension(get_extension(file404)), string(data))
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
     }
