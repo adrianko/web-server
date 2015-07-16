@@ -11,7 +11,6 @@ import (
 )
 /**
  * TODO File index on directory
- * TODO Consolidate send function
  */
 var config_file string = "/etc/maester-http"
 
@@ -29,7 +28,7 @@ type Handler struct{}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
-        send(r, w, path)
+        send(r, w, 200, path)
     } else {
         send_not_found(r, w)
     }
@@ -155,7 +154,7 @@ func get_file(path string) string {
     return filePath[len(filePath) - 1]
 }
 
-func send(r *http.Request, w http.ResponseWriter, static_file string) {
+func send(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     data, err := ioutil.ReadFile(static_file)
 
     if err != nil {
@@ -165,16 +164,15 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
     }
     
     if valid_file(static_file) {
-        send_response(r, w, 200, mime.TypeByExtension(get_extension(static_file)), string(data))
+        send_response(r, w, status, mime.TypeByExtension(get_extension(static_file)), string(data))
     } else {
         send_not_found(r, w)
     }
 }
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
-    if configuration["error404"] != "" {    
-        data, _ := ioutil.ReadFile(configuration["error404"])
-        send_response(r, w, 404, mime.TypeByExtension(get_extension(configuration["error404"])), string(data))
+    if configuration["error404"] != "" {
+        send(r, w, 404, configuration["error404"])
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
     }
