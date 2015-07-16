@@ -20,7 +20,7 @@ var configuration map[string]string = map[string]string{
     "port":      "80",
     "interface": "0.0.0.0",
     "index":     "index.html",
-    "error404":  "/error/error404.html",
+    "error404":  "error/error404.html",
 }
 
 var index_files []string = []string{}
@@ -169,7 +169,13 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
     if configuration["error404"] != "" {
-        data, _ := ioutil.ReadFile(configuration["root"] + configuration["error404"])
+        path := ""
+        
+        if !strings.HasPrefix(configuration["error404"], "/") {
+            path = configuration["root"]
+        }
+        
+        data, _ := ioutil.ReadFile(path + configuration["error404"])
         send_response(r, w, 404, mime.TypeByExtension(get_extension(configuration["error404"])), string(data))
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
