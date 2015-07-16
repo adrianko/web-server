@@ -119,7 +119,17 @@ func valid_file(path string) bool {
 }
 
 func get_extension(file string) string {
+    if strings.Contains(file, "/") {
+        file = get_file(file)
+    }
     
+    if !valid_file(file) {
+        return ""
+    }
+    
+    fileName := strings.Split(filePath[len(filePath) - 1], ".")
+
+    return "." + fileName[len(fileName) - 1]
 }
 
 func get_file(path string) string {
