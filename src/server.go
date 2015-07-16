@@ -12,7 +12,6 @@ import (
 /**
  * TODO File index on directory
  * TODO Consolidate send function
- * TODO Add dot files to valid_file function
  */
 var config_file string = "/etc/maester-http"
 
