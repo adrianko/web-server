@@ -78,8 +78,12 @@ func validate_config() {
     err_file := configuration["error404"]
     configuration["error404"] = ""
     
-    if valid_file(configuration["root"] + err_file) {    
-        _, err := ioutil.ReadFile(configuration["root"] + err_file)
+    if !strings.HasPrefix(err_file, "/") {
+        err_file = configuration["root"] + "/" + err_file
+    }
+    
+    if valid_file(err_file) {    
+        _, err := ioutil.ReadFile(err_file)
             
         if err == nil {
             configuration["error404"] = err_file
@@ -168,14 +172,8 @@ func send(r *http.Request, w http.ResponseWriter, static_file string) {
 }
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
-    if configuration["error404"] != "" {
-        path := ""
-        
-        if !strings.HasPrefix(configuration["error404"], "/") {
-            path = configuration["root"]
-        }
-        
-        data, _ := ioutil.ReadFile(path + configuration["error404"])
+    if configuration["error404"] != "" {    
+        data, _ := ioutil.ReadFile(configuration["error404"])
         send_response(r, w, 404, mime.TypeByExtension(get_extension(configuration["error404"])), string(data))
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
