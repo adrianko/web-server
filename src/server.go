@@ -19,7 +19,7 @@ var configuration map[string]string = map[string]string{
     "interface": "0.0.0.0",
     "index":     "index.html",
     "error404":  "error/error404.html",
-    "showfiles": "off"
+    "showfiles": "off",
 }
 
 var index_files []string = []string{}
