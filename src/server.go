@@ -27,7 +27,7 @@ type Handler struct{}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
-        send(r, w, 200, path)
+        send_file(r, w, 200, path)
     } else {
         send_not_found(r, w)
     }
@@ -157,7 +157,7 @@ func get_mime_type(data []byte) string {
     return http.DetectContentType(data)
 }
 
-func send(r *http.Request, w http.ResponseWriter, status int, static_file string) {
+func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     data, err := ioutil.ReadFile(static_file)
 
     if err != nil {
@@ -175,7 +175,7 @@ func send(r *http.Request, w http.ResponseWriter, status int, static_file string
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
     if configuration["error404"] != "" {
-        send(r, w, 404, configuration["error404"])
+        send_file(r, w, 404, configuration["error404"])
     } else {
         send_response(r, w, 404, "text/plain", "404: Not found")
     }
