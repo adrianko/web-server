@@ -4,7 +4,6 @@ import (
     "io"
     "io/ioutil"
     "log"
-    "mime"
     "net/http"
     "os"
     "strings"
@@ -154,6 +153,10 @@ func get_file(path string) string {
     return filePath[len(filePath) - 1]
 }
 
+func get_mime_type(data []byte) string {
+    return http.DetectContentType(data)
+}
+
 func send(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     data, err := ioutil.ReadFile(static_file)
 
@@ -164,7 +167,7 @@ func send(r *http.Request, w http.ResponseWriter, status int, static_file string
     }
     
     if valid_file(static_file) {
-        send_response(r, w, status, mime.TypeByExtension(get_extension(static_file)), string(data))
+        send_response(r, w, status, get_mime_type(data), string(data))
     } else {
         send_not_found(r, w)
     }
