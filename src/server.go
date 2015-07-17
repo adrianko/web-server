@@ -19,6 +19,7 @@ var configuration map[string]string = map[string]string{
     "interface": "0.0.0.0",
     "index":     "index.html",
     "error404":  "error/error404.html",
+    "showfiles": "off"
 }
 
 var index_files []string = []string{}
@@ -72,7 +73,7 @@ func validate_config() {
         index_files = append(index_files, strings.TrimSpace(in))
     }
     
-    // validate error file on load instead of per Request
+    // validate error file on load instead of per request
     err_file := configuration["error404"]
     configuration["error404"] = ""
     
