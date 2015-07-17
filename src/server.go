@@ -190,7 +190,8 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
     if content_type != "" {
         w.Header().Set("Content-Type", content_type)
     }
-
+    
+    w.Header().Set("Server", "Maester/0.1")
     w.WriteHeader(status)
     log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
