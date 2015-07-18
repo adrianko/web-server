@@ -24,6 +24,13 @@ var configuration map[string]string = map[string]string{
 
 var index_files []string = []string{}
 
+var file_cache map[string]CacheFile = make(map[string]CacheFile)
+
+type CacheFile struct {
+    content []byte
+    content_type string
+}
+
 type Handler struct{}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -159,16 +166,28 @@ func get_mime_type(data []byte) string {
 }
 
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
-    data, err := ioutil.ReadFile(static_file)
+    var data []byte
+    var mime_type string
 
-    if err != nil {
-        log.Printf("Could not read file: " + static_file)
-        send_locked(r, w)
-        return
+    if value, ok := file_cache[static_file]; ok {
+        data = value.content  
+        mime_type = value.content_type
+    } else {
+        file_data, err := ioutil.ReadFile(static_file)
+
+        if err != nil {
+            log.Printf("Could not read file: " + static_file)
+            send_locked(r, w)
+            return
+        }
+
+        data = file_data
+        mime_type = get_mime_type(data)
+        file_cache[static_file] = CacheFile{data, mime_type}
     }
-    
+
     if valid_file(static_file) {
-        send_response(r, w, status, get_mime_type(data), string(data))
+        send_response(r, w, status, mime_type, string(data))
     } else {
         send_not_found(r, w)
     }
