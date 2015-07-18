@@ -13,6 +13,7 @@ import (
  * TODO File system watcher to invalidate cache for updated files
  */
 
+const SERVER_NAME string = "Maester"
 const VERSION string = "0.2"
 
 var config_file string = "/etc/maester-http"
@@ -214,7 +215,7 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
         w.Header().Set("Content-Type", content_type)
     }
     
-    w.Header().Set("Server", "Maester/" + VERSION)
+    w.Header().Set("Server", SERVER_NAME + "/" + VERSION)
     w.WriteHeader(status)
     //log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
