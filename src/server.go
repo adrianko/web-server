@@ -263,6 +263,6 @@ func check(err error) {
 func main() {
     read_args()
     load_config()
-    //file_watcher()
+    go file_watcher()
     start_server()
 }
