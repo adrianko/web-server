@@ -7,6 +7,7 @@ import (
     "net/http"
     "os"
     "strings"
+    "gopkg.in/fsnotify.v1"
 )
 /**
  * TODO File index on directory
@@ -170,6 +171,32 @@ func get_mime_type(data []byte) string {
     return http.DetectContentType(data)
 }
 
+func file_watcher() {
+    watcher, err := fsnotify.NewWatcher()
+    check(err)
+    defer watcher.Close()
+    done := make(chan bool)
+
+    go func() {
+        for {
+            select {
+            case event := <-watcher.Events:
+                log.Println("event:", event)
+
+                if event.Op&fsnotify.Write == fsnotify.Write {
+                    log.Println("modified:", event.Name)
+                }
+            case err := <-watcher.Errors:
+                log.Println("error:", err)
+            }
+        }
+    }()
+
+    err = watcher.Add(configuration["root"] + "/index.html")
+    check(err)
+    <-done
+}
+
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     var data string
     var mime_type string
@@ -236,5 +263,6 @@ func check(err error) {
 func main() {
     read_args()
     load_config()
+    //file_watcher()
     start_server()
 }
