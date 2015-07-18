@@ -10,6 +10,7 @@ import (
 )
 /**
  * TODO File index on directory
+ * TODO File system watcher to invalidate cache for updated files
  */
 var config_file string = "/etc/maester-http"
 
