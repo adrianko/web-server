@@ -27,7 +27,7 @@ var index_files []string = []string{}
 var file_cache map[string]CacheFile = make(map[string]CacheFile)
 
 type CacheFile struct {
-    content []byte
+    content string
     content_type string
 }
 
@@ -166,7 +166,7 @@ func get_mime_type(data []byte) string {
 }
 
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
-    var data []byte
+    var data string
     var mime_type string
 
     if value, ok := file_cache[static_file]; ok {
@@ -181,13 +181,13 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
             return
         }
 
-        data = file_data
-        mime_type = get_mime_type(data)
+        data = string(file_data)
+        mime_type = get_mime_type(file_data)
         file_cache[static_file] = CacheFile{data, mime_type}
     }
 
     if valid_file(static_file) {
-        send_response(r, w, status, mime_type, string(data))
+        send_response(r, w, status, mime_type, data)
     } else {
         send_not_found(r, w)
     }
@@ -212,7 +212,7 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
     
     w.Header().Set("Server", "Maester/0.1")
     w.WriteHeader(status)
-    log.Printf("%d %s: %s", status, r.Method, r.URL.String())
+    //log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
 }
 
