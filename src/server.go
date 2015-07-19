@@ -39,7 +39,7 @@ type CacheFile struct {
     content_type string
 }
 
-type Handler struct{}
+type Handler struct {}
 
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
