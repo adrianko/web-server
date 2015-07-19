@@ -32,6 +32,8 @@ var index_files []string = []string{}
 
 var file_cache map[string]CacheFile = make(map[string]CacheFile)
 
+var file_watcher *fsnotify.Watcher
+
 type CacheFile struct {
     content string
     content_type string
@@ -171,29 +173,28 @@ func get_mime_type(data []byte) string {
     return http.DetectContentType(data)
 }
 
-func file_watcher() {
+func load_file_watcher() {
     watcher, err := fsnotify.NewWatcher()
     check(err)
-    defer watcher.Close()
+    file_watcher := watcher
+    defer file_watcher.Close()
     done := make(chan bool)
 
     go func() {
         for {
             select {
-            case event := <-watcher.Events:
+            case event := <-file_watcher.Events:
                 log.Println("event:", event)
 
                 if event.Op&fsnotify.Write == fsnotify.Write {
                     log.Println("modified:", event.Name)
                 }
-            case err := <-watcher.Errors:
+            case err := <-file_watcher.Errors:
                 log.Println("error:", err)
             }
         }
     }()
 
-    err = watcher.Add(configuration["root"] + "/index.html")
-    check(err)
     <-done
 }
 
@@ -263,6 +264,6 @@ func check(err error) {
 func main() {
     read_args()
     load_config()
-    go file_watcher()
+    go load_file_watcher()
     start_server()
 }
