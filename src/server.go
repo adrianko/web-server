@@ -110,12 +110,8 @@ func valid_path(path string) (bool, string) {
         return true, path
     }
 
-    if strings.HasSuffix(path, "/") {
+    if info, err := os.Stat(path); err == nil && info.IsDir() {
         return valid_index(path)
-    }
-
-    if !strings.HasSuffix(path, "/") && !strings.HasSuffix(path, "index.html") {
-        return valid_path(path + "/")
     }
 
     return false, path
@@ -187,7 +183,7 @@ func load_file_watcher() {
                     delete(file_cache, event.Name)
                 }
             case err := <-file_watcher.Errors:
-                log.Println("error:", err)
+                log.Println("File watcher error: ", err)
             }
         }
     }()
@@ -206,7 +202,7 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
         file_data, err := ioutil.ReadFile(static_file)
 
         if err != nil {
-            log.Printf("Could not read file: " + static_file)
+            log.Println("Could not read file: " + static_file)
             send_locked(r, w)
             return
         }
