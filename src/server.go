@@ -181,6 +181,7 @@ func load_file_watcher() {
             case event := <-file_watcher.Events:
                 if event.Op&fsnotify.Write == fsnotify.Write {
                     delete(file_cache, event.Name)
+                    file_watcher.Remove(event.Name)
                 }
             case err := <-file_watcher.Errors:
                 log.Println("File watcher error: ", err)
