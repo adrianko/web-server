@@ -176,18 +176,15 @@ func get_mime_type(data []byte) string {
 func load_file_watcher() {
     watcher, err := fsnotify.NewWatcher()
     check(err)
-    file_watcher := watcher
-    defer file_watcher.Close()
+    file_watcher = watcher
     done := make(chan bool)
 
     go func() {
         for {
             select {
             case event := <-file_watcher.Events:
-                log.Println("event:", event)
-
                 if event.Op&fsnotify.Write == fsnotify.Write {
-                    log.Println("modified:", event.Name)
+                    delete(file_cache, event.Name)
                 }
             case err := <-file_watcher.Errors:
                 log.Println("error:", err)
@@ -217,6 +214,7 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
         data = string(file_data)
         mime_type = get_mime_type(file_data)
         file_cache[static_file] = CacheFile{data, mime_type}
+        file_watcher.Add(static_file)
     }
 
     if valid_file(static_file) {
