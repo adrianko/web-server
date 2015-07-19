@@ -15,7 +15,7 @@ import (
  */
 
 const SERVER_NAME string = "Maester"
-const VERSION string = "0.2"
+const VERSION string = "0.3"
 
 var config_file string = "/etc/maester-http"
 
