@@ -245,7 +245,12 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     }
 
     for _, f := range files {
-        file_list += "<tr><td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td><td></td><td></td></tr>"
+        info, _ := os.Stat(configuration["root"] + url + f.Name())
+        file_list += "<tr>"
+        file_list += "<td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
+        file_list += "<td>" + info.ModTime().String() + "</td>"
+        file_list += "<td>" + string(info.Size()) + " bytes</td>"
+        file_list += "</tr>"
     }
 
     file_list += "</table>"
