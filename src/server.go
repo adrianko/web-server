@@ -229,7 +229,8 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
 
 func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     files, _ := ioutil.ReadDir(configuration["root"] + url)
-    var file_list string
+    file_list := "<html><head><title>Index of: " + url + "</title>"
+    file_list += "<body><h1>Directory index: <em>" + url + "</em></h1>"
 
     if !strings.HasSuffix(url, "/") {
         url += "/"
@@ -238,6 +239,8 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     for _, f := range files {
         file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a><br />"
     }
+
+    file_list += "</body></html>"
 
     send_response(r, w, 200, "text/html", file_list)
 }
