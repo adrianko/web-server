@@ -45,7 +45,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
     } else if configuration["showfiles"] == "on" {
-        log.Printf("Check directory: %s", r.URL.String())
+        
     } else {
         send_not_found(r, w)
     }
@@ -145,6 +145,12 @@ func valid_file(path string) bool {
     }
 
     return false
+}
+
+func valid_dir(path string) bool {
+    info, err := os.Stat(path)
+    
+    return err == nil && info.IsDir()
 }
 
 func get_extension(file string) string {
