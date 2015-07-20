@@ -229,18 +229,28 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
 
 func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     files, _ := ioutil.ReadDir(configuration["root"] + url)
-    file_list := "<html><head><title>Index of: " + url + "</title>"
-    file_list += "<body><h1>Directory index: <em>" + url + "</em></h1>"
+    file_list := "<html>"
+    file_list += "<head>"
+    file_list += "<title>Index of: " + url + "</title>"
+    file_list += "<style>"
+    file_list += "body { font-family: Cambria }"
+    file_list += "</style>"
+    file_list += "<body>"
+    file_list += "<h1>Directory index: <em>" + url + "</em></h1>"
+    file_list += "<table>"
+    file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
 
     if !strings.HasSuffix(url, "/") {
         url += "/"
     }
 
     for _, f := range files {
-        file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a><br />"
+        file_list += "<tr><td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td><td></td><td></td></tr>"
     }
 
-    file_list += "</body></html>"
+    file_list += "</table>"
+    file_list += "</body>"
+    file_list += "</html>"
 
     send_response(r, w, 200, "text/html", file_list)
 }
