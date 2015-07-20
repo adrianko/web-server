@@ -45,7 +45,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
     } else if configuration["showfiles"] == "on" {
-        log.Printf("showfiles: %s", r.URL.String())
+        send_file_list(r, w, r.URL.String())
     } else {
         send_not_found(r, w)
     }
@@ -225,6 +225,21 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
     } else {
         send_not_found(r, w)
     }
+}
+
+func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
+    files, _ := ioutil.ReadDir(configuration["root"] + url)
+    var file_list string
+
+    if !strings.HasSuffix(url, "/") {
+        url += "/"
+    }
+
+    for _, f := range files {
+        file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a><br />"
+    }
+
+    send_response(r, w, 200, "text/html", file_list)
 }
 
 func send_not_found(r *http.Request, w http.ResponseWriter) {
