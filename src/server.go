@@ -45,7 +45,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
     } else if configuration["showfiles"] == "on" {
-        
+        log.Printf("showfiles: %s", r.URL.String())
     } else {
         send_not_found(r, w)
     }
@@ -112,7 +112,7 @@ func valid_path(path string) (bool, string) {
         return true, path
     }
 
-    if info, err := os.Stat(path); err == nil && info.IsDir() {
+    if valid_dir(path) {
         return valid_index(path)
     }
 
@@ -139,12 +139,10 @@ func valid_file(path string) bool {
     if strings.HasPrefix(filePath[len(filePath) - 1], ".") {
         return false;
     }
-    
-    if info, err := os.Stat(path); err == nil && !info.IsDir() {
-        return true
-    }
 
-    return false
+    info, err := os.Stat(path); 
+    
+    return err == nil && !info.IsDir()
 }
 
 func valid_dir(path string) bool {
