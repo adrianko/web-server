@@ -13,8 +13,7 @@ import (
     "gopkg.in/fsnotify.v1"
 )
 /**
- * TODO File index on directory
- * TODO File system watcher to invalidate cache for updated files
+ *
  */
 
 const SERVER_NAME string = "Maester"
