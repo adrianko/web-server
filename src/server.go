@@ -13,7 +13,7 @@ import (
     "gopkg.in/fsnotify.v1"
 )
 /**
- *
+ * TODO Add icons to different folder and file types in file index
  */
 
 const SERVER_NAME string = "Maester"
