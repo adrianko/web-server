@@ -268,7 +268,15 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<tr>"
         file_list += "<td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
-        file_list += "<td>" + format_bytes(info.Size()) + "</td>"
+        file_list += "<td>"
+
+        if !info.IsDir() {
+            file_list += format_bytes(info.Size())
+        } else {
+            file_list += "-"
+        }
+
+        file_list += "</td>"
         file_list += "</tr>"
     }
 
