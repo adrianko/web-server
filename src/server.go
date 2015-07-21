@@ -8,6 +8,8 @@ import (
     "os"
     "strings"
     "strconv"
+    "math"
+    "fmt"
     "gopkg.in/fsnotify.v1"
 )
 /**
@@ -17,6 +19,8 @@ import (
 
 const SERVER_NAME string = "Maester"
 const VERSION string = "0.3"
+
+const BYTES_PER_KB int64 = 1024
 
 var config_file string = "/etc/maester-http"
 
@@ -176,6 +180,18 @@ func get_mime_type(data []byte) string {
     return http.DetectContentType(data)
 }
 
+func format_bytes(bytes int64) string {
+    if bytes < BYTES_PER_KB {
+        return strconv.FormatInt(bytes, 10) + " B"
+    }
+
+    exp := int(math.Log(float64(bytes)) / math.Log(float64(BYTES_PER_KB)))
+    pre := []string{"K", "M", "G", "T", "P", "E"}[exp - 1]
+
+    return fmt.Sprintf("%.1f %sB", float64(bytes) / math.Pow(float64(BYTES_PER_KB), float64(exp)), pre)
+
+}
+
 func load_file_watcher() {
     watcher, err := fsnotify.NewWatcher()
     check(err)
@@ -252,7 +268,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<tr>"
         file_list += "<td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
-        file_list += "<td>" + strconv.FormatInt(info.Size(), 10) + " bytes</td>"
+        file_list += "<td>" + format_bytes(info.Size()) + "</td>"
         file_list += "</tr>"
     }
 
