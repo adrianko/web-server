@@ -7,6 +7,7 @@ import (
     "net/http"
     "os"
     "strings"
+    "strconv"
     "gopkg.in/fsnotify.v1"
 )
 /**
@@ -251,7 +252,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<tr>"
         file_list += "<td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
-        file_list += "<td>" + string(info.Size()) + " bytes</td>"
+        file_list += "<td>" + strconv.FormatInt(info.Size(), 10) + " bytes</td>"
         file_list += "</tr>"
     }
 
