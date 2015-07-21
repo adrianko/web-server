@@ -20,6 +20,11 @@ const SERVER_NAME string = "Maester"
 const VERSION string = "0.4"
 
 const BYTES_PER_KB int64 = 1024
+var file_icons map[string]string = map[string]string{
+    "file": ``,
+    "folder": ``,
+}
+
 
 var config_file string = "/etc/maester-http"
 
@@ -252,6 +257,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "body{font-family:Cambria}"
     file_list += "tr:first-child{font-weight:bold}"
     file_list += "td{padding:0 5px}"
+    file_list += "img{vertical-align:middle}"
     file_list += "</style>"
     file_list += "<body>"
     file_list += "<h1>Directory index: <em>" + url + "</em></h1>"
@@ -266,7 +272,15 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     for _, f := range files {
         info, _ := os.Stat(configuration["root"] + url + f.Name())
         file_list += "<tr>"
-        file_list += "<td><a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
+        file_list += "<td>"
+        
+        if info.IsDir() {
+            file_list += "<img src=\"" + file_icons["folder"] + "\" alt=\"Folder icon\" />"
+        } else {
+            file_list += "<img src=\"" + file_icons["file"] + "\" alt=\"File icon\" />"
+        }
+
+        file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
         file_list += "<td>"
 
