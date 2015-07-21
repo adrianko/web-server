@@ -225,6 +225,16 @@ func load_file_watcher() {
     <-done
 }
 
+func get_icon(icon string, space bool) string {
+    icon_string := "<img src=\"" + file_icons[icon] + "\" alt=\"" + icon + " icon\" />"
+
+    if space {
+        icon_string += " "
+    }
+
+    return icon_string
+}
+
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     var data string
     var mime_type string
@@ -270,7 +280,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "<table>"
     file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
     file_list += "<tr><td>"
-    file_list += "<img src=\"" + file_icons["back"] + "\" alt=\"Back icon\" /> "
+    file_list += get_icon("back", true)
     file_list += "<a href=\"../\">Parent directory</a>"
     file_list += "</td><td></td><td></td></tr>"
 
@@ -284,9 +294,9 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<td>"
         
         if info.IsDir() {
-            file_list += "<img src=\"" + file_icons["folder"] + "\" alt=\"Folder icon\" /> "
+            file_list += get_icon("folder", true)
         } else {
-            file_list += "<img src=\"" + file_icons["file"] + "\" alt=\"File icon\" /> "
+            file_list += get_icon("file", true)
         }
 
         file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
