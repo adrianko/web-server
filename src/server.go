@@ -18,7 +18,7 @@ import (
  */
 
 const SERVER_NAME string = "Maester"
-const VERSION string = "0.3"
+const VERSION string = "0.4"
 
 const BYTES_PER_KB int64 = 1024
 
