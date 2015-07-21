@@ -21,10 +21,16 @@ const VERSION string = "0.4"
 
 const BYTES_PER_KB int64 = 1024
 var file_icons map[string]string = map[string]string{
-    "file": ``,
-    "folder": ``,
+    "back":     `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX////M//+ZmZlmZmYzMzMAAACe
+                i5rnAAAAAnRSTlP/AOW3MEoAAABVSURBVHgBbdFBCsBACENR45j7X7kQtC0T//KRjRhYevGgyjBL+VLZUtlS2VItS1AI1QQONgNZHCS
+                UZJAc+ZB3sViFGzPcDmxZqdsvgRB/aJRu73D0HuO2BJfFYAozAAAAAElFTkSuQmCC`,
+    "file":     `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAD1BMVEX////M//+ZmZkzMzMAAABVsTOV
+                AAAAAnRSTlP/AOW3MEoAAABXSURBVHgBpcpBDsQwCENRY+f+Zx55QKShlbrozyrPQNcig9AJekJoI7mcUGo0FVobS/8v0X/uaSNqIxM
+                rDkxyQGMbD2wbaLojJnbz8gO6VxSPZIxYo4gfuU0C6reH1fMAAAAASUVORK5CYII=`,
+    "folder":   `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX/////zJnM//+ZZjMzMzMAAADC
+                EvqoAAAAA3RSTlP//wDXyg1BAAAASElEQVR42s3KQQ6AQAhDUaXt/a/sQDrRJu7c+NmQB0e99B3lnqjT6cYx6zSIbV40n3D7psYMoBo
+                z4w8/EdNYQsbGEjNxYSljXTEsA9O1pLTvAAAAAElFTkSuQmCC`,
 }
-
 
 var config_file string = "/etc/maester-http"
 
@@ -263,7 +269,10 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "<h1>Directory index: <em>" + url + "</em></h1>"
     file_list += "<table>"
     file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
-    file_list += "<tr><td><a href=\"../\">Parent directory</a></td><td></td><td></td></tr>"
+    file_list += "<tr><td>"
+    file_list += "<img src=\"" + file_icons["back"] + "\" alt=\"Back icon\" /> "
+    file_list += "<a href=\"../\">Parent directory</a>"
+    file_list += "</td><td></td><td></td></tr>"
 
     if !strings.HasSuffix(url, "/") {
         url += "/"
@@ -275,9 +284,9 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<td>"
         
         if info.IsDir() {
-            file_list += "<img src=\"" + file_icons["folder"] + "\" alt=\"Folder icon\" />"
+            file_list += "<img src=\"" + file_icons["folder"] + "\" alt=\"Folder icon\" /> "
         } else {
-            file_list += "<img src=\"" + file_icons["file"] + "\" alt=\"File icon\" />"
+            file_list += "<img src=\"" + file_icons["file"] + "\" alt=\"File icon\" /> "
         }
 
         file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
