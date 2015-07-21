@@ -258,6 +258,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "<h1>Directory index: <em>" + url + "</em></h1>"
     file_list += "<table>"
     file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
+    file_list += "<tr><td><a href=\"../\">Parent directory</a></td><td></td><td></td></tr>"
 
     if !strings.HasSuffix(url, "/") {
         url += "/"
