@@ -34,6 +34,9 @@ var file_icons map[string]string = map[string]string{
                 "mZmAAAzMzMAmcwAmTMAM2YAAADMt1kEAAAAA3RSTlP//wDXyg1BAAAAbUlEQVR42m3JQRKDMAxDUTWGKIH73xdNBB275Wv3BOaa" +
                 "A/GN4BuCbyg1flz4Z8GOk2s/6CoCm0o4VQAFJxBLcWPIRIq6Hux9xjTGcaOajjESctnOkTFoKyhVo6B9VLT9YxwuYcrIrUQhWjt" +
                 "rwgujCAczWx6q5QAAAABJRU5ErkJggg==",
+    "text":     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAD1BMVEX////M//+ZmZkzMzMAAABVs" +
+                "TOVAAAAAnRSTlP/AOW3MEoAAABISURBVHjatcrRCgAgCENRbf7/N7dKomGvngjhMsPLD4NdMPwia438NRIyxsaL/XQZhyxpkC6z" +
+                "yjLXGVXnkhqWJWIIrOgeinECLlUCjBCqNQoAAAAASUVORK5CYII=",
 }
 
 var config_file string = "/etc/maester-http"
