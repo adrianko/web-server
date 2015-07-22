@@ -242,6 +242,14 @@ func get_icon(icon string, space bool) string {
     return icon_string
 }
 
+func file_folder_icon(is_directory bool, space bool) string {
+    if is_directory {
+        return get_icon("folder", space)
+    }
+
+    return get_icon("file", space)
+}
+
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     var data string
     var mime_type string
