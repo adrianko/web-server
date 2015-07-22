@@ -20,6 +20,7 @@ const SERVER_NAME string = "Maester"
 const VERSION string = "0.4"
 
 const BYTES_PER_KB int64 = 1024
+const BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
 var file_icons map[string]string = map[string]string{
     "back":     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX////M//+ZmZlmZmYzMzMAA" +
                 "ACei5rnAAAAAnRSTlP/AOW3MEoAAABVSURBVHgBbdFBCsBACENR45j7X7kQtC0T//KRjRhYevGgyjBL+VLZUtlS2VItS1AI1QQO" +
@@ -202,10 +203,11 @@ func format_bytes(bytes int64) string {
         return strconv.FormatInt(bytes, 10) + " B"
     }
 
-    exp := int(math.Log(float64(bytes)) / math.Log(float64(BYTES_PER_KB)))
+    bytes_fl := float64(bytes)
+    exp := int(math.Log(bytes_fl) / math.Log(BYTES_PER_KB_FL))
     pre := []string{"K", "M", "G", "T", "P", "E"}[exp - 1]
 
-    return fmt.Sprintf("%.1f %sB", float64(bytes) / math.Pow(float64(BYTES_PER_KB), float64(exp)), pre)
+    return fmt.Sprintf("%.1f %sB", bytes_fl / math.Pow(BYTES_PER_KB_FL, float64(exp)), pre)
 
 }
 
