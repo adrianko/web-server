@@ -21,15 +21,15 @@ const VERSION string = "0.4"
 
 const BYTES_PER_KB int64 = 1024
 var file_icons map[string]string = map[string]string{
-    "back":     `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX////M//+ZmZlmZmYzMzMAAACe
-                i5rnAAAAAnRSTlP/AOW3MEoAAABVSURBVHgBbdFBCsBACENR45j7X7kQtC0T//KRjRhYevGgyjBL+VLZUtlS2VItS1AI1QQONgNZHCS
-                UZJAc+ZB3sViFGzPcDmxZqdsvgRB/aJRu73D0HuO2BJfFYAozAAAAAElFTkSuQmCC`,
-    "file":     `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAD1BMVEX////M//+ZmZkzMzMAAABVsTOV
-                AAAAAnRSTlP/AOW3MEoAAABXSURBVHgBpcpBDsQwCENRY+f+Zx55QKShlbrozyrPQNcig9AJekJoI7mcUGo0FVobS/8v0X/uaSNqIxM
-                rDkxyQGMbD2wbaLojJnbz8gO6VxSPZIxYo4gfuU0C6reH1fMAAAAASUVORK5CYII=`,
-    "folder":   `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX/////zJnM//+ZZjMzMzMAAADC
-                EvqoAAAAA3RSTlP//wDXyg1BAAAASElEQVR42s3KQQ6AQAhDUaXt/a/sQDrRJu7c+NmQB0e99B3lnqjT6cYx6zSIbV40n3D7psYMoBo
-                z4w8/EdNYQsbGEjNxYSljXTEsA9O1pLTvAAAAAElFTkSuQmCC`,
+    "back":     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX////M//+ZmZlmZmYzMzMAA" +
+                "ACei5rnAAAAAnRSTlP/AOW3MEoAAABVSURBVHgBbdFBCsBACENR45j7X7kQtC0T//KRjRhYevGgyjBL+VLZUtlS2VItS1AI1QQO" +
+                "NgNZHCSUZJAc+ZB3sViFGzPcDmxZqdsvgRB/aJRu73D0HuO2BJfFYAozAAAAAElFTkSuQmCC",
+    "file":     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAD1BMVEX////M//+ZmZkzMzMAAABVs" +
+                "TOVAAAAAnRSTlP/AOW3MEoAAABXSURBVHgBpcpBDsQwCENRY+f+Zx55QKShlbrozyrPQNcig9AJekJoI7mcUGo0FVobS/8v0X/u" +
+                "aSNqIxMrDkxyQGMbD2wbaLojJnbz8gO6VxSPZIxYo4gfuU0C6reH1fMAAAAASUVORK5CYII=",
+    "folder":   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX/////zJnM//+ZZjMzMzMAA" +
+                "ADCEvqoAAAAA3RSTlP//wDXyg1BAAAASElEQVR42s3KQQ6AQAhDUaXt/a/sQDrRJu7c+NmQB0e99B3lnqjT6cYx6zSIbV40n3D7" +
+                "psYMoBoz4w8/EdNYQsbGEjNxYSljXTEsA9O1pLTvAAAAAElFTkSuQmCC",
 }
 
 var config_file string = "/etc/maester-http"
