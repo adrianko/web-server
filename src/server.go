@@ -306,15 +306,8 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     for _, f := range files {
         info, _ := os.Stat(configuration["root"] + url + f.Name())
         file_list += "<tr>"
-        file_list += "<td>"
-        
-        if info.IsDir() {
-            file_list += get_icon("folder", true)
-        } else {
-            file_list += get_icon("file", true)
-        }
-
-        file_list += "<a href=\"" + url + f.Name() + "\">" + f.Name() + "</a></td>"
+        file_list += "<td>" + file_folder_icon(info.IsDir(), true) +"<a href=\"" + url + f.Name() + "\">" + f.Name() +
+            "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
         file_list += "<td>"
 
