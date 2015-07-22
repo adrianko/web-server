@@ -232,22 +232,16 @@ func load_file_watcher() {
     <-done
 }
 
-func get_icon(icon string, space bool) string {
-    icon_string := "<img src=\"" + file_icons[icon] + "\" alt=\"" + icon + " icon\" />"
-
-    if space {
-        icon_string += " "
-    }
-
-    return icon_string
+func get_icon(icon string) string {
+    return "<img src=\"" + file_icons[icon] + "\" alt=\"" + icon + " icon\" />"
 }
 
-func file_folder_icon(is_directory bool, space bool) string {
+func file_folder_icon(is_directory bool) string {
     if is_directory {
-        return get_icon("folder", space)
+        return get_icon("folder")
     }
 
-    return get_icon("file", space)
+    return get_icon("file")
 }
 
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
@@ -294,10 +288,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "<h1>Directory index: <em>" + url + "</em></h1>"
     file_list += "<table>"
     file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
-    file_list += "<tr><td>"
-    file_list += get_icon("back", true)
-    file_list += "<a href=\"../\">Parent directory</a>"
-    file_list += "</td><td></td><td></td></tr>"
+    file_list += "<tr><td>" + get_icon("back") + " <a href=\"../\">Parent directory</a></td><td></td><td></td></tr>"
 
     if !strings.HasSuffix(url, "/") {
         url += "/"
@@ -306,7 +297,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     for _, f := range files {
         info, _ := os.Stat(configuration["root"] + url + f.Name())
         file_list += "<tr>"
-        file_list += "<td>" + file_folder_icon(info.IsDir(), true) +"<a href=\"" + url + f.Name() + "\">" + f.Name() +
+        file_list += "<td>" + file_folder_icon(info.IsDir()) + " <a href=\"" + url + f.Name() + "\">" + f.Name() +
             "</a></td>"
         file_list += "<td>" + info.ModTime().String() + "</td>"
         file_list += "<td>"
