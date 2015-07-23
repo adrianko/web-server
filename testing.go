@@ -2,7 +2,6 @@ package main
 
 import (
     "testing"
-    "github.com/adrianko/web-server"
 )
 
 func TestValid_dir(t * testing.T) {
