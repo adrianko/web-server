@@ -1,8 +1,8 @@
-package test
+package main
 
 import (
     "testing"
-    "github.com/adrianko/web-server/src"
+    "github.com/adrianko/web-server"
 )
 
 func TestValid_dir(t * testing.T) {
