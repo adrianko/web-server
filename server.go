@@ -100,12 +100,18 @@ func read_args() {
     }
 }
 
+func load_config() {
+    conf := load_config_file()
+    parse_config(string(conf))
+    validate_config()
+}
 // Load the configuration file and attempt to read contents.
 // FATAL: If cannot read file
-func load_config() {
+func load_config_file() []byte {
     data, err := ioutil.ReadFile(config_file)
     check(err)
-    parse_config(string(data))
+
+    return data
 }
 
 // Parse the loaded config line by line ignoring commented out lines
@@ -121,8 +127,6 @@ func parse_config(config string) {
             configuration[property] = value
         }
     }
-
-    validate_config()
 }
 
 // Validate the configuration loaded and check each property contains valid value
