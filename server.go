@@ -100,6 +100,7 @@ func read_args() {
     }
 }
 
+// Run all config loading, parsing and validation
 func load_config() {
     conf := load_config_file()
     parse_config(string(conf))
