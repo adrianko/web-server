@@ -16,11 +16,21 @@ import (
  * TODO Add icons to different folder and file types in file index
  */
 
+ // Name of the server sent in the HTTP response header
 const SERVER_NAME string = "Maester"
+
+// Current version of the server
 const VERSION string = "0.4"
 
+// Number of bytes to use per Kb/Mb/Gb.
+// Can also use 1000 for SI
 const BYTES_PER_KB int64 = 1024
+
+// Float of BYTES_PER_KB.
+// Cached here to prevent frequent conversions of int64 to float64
 const BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
+
+// Base64 encoded images sent back in file lists
 var file_icons map[string]string = map[string]string{
     "back":     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAElBMVEX////M//+ZmZlmZmYzMzMAA" +
                 "ACei5rnAAAAAnRSTlP/AOW3MEoAAABVSURBVHgBbdFBCsBACENR45j7X7kQtC0T//KRjRhYevGgyjBL+VLZUtlS2VItS1AI1QQO" +
@@ -40,8 +50,10 @@ var file_icons map[string]string = map[string]string{
                 "yjLXGVXnkhqWJWIIrOgeinECLlUCjBCqNQoAAAAASUVORK5CYII=",
 }
 
+// The default configuration file
 var config_file string = "/etc/maester-http"
 
+// The default configuration settings used if not provided in a custom configuration
 var configuration map[string]string = map[string]string{
     "root":      "/var/www",
     "port":      "80",
@@ -51,19 +63,26 @@ var configuration map[string]string = map[string]string{
     "showfiles": "off",
 }
 
+// Default index files to search for if not explicitly stated in the URL
 var index_files []string = []string{}
 
+// Cache of static files sent back in HTTP responses to prevent frequent file system IO
 var file_cache map[string]CacheFile = make(map[string]CacheFile)
 
+// File watcher to invalidate cached files
 var file_watcher *fsnotify.Watcher
 
+// CacheFile type storing both a file's contents and it's type
 type CacheFile struct {
     content string
     content_type string
 }
 
+// Default server handler
 type Handler struct {}
 
+// All requests are parse and passed through ServeHTTP
+// Acts as a controller
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
@@ -74,18 +93,22 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+// Check if custom configuration file passed as argument
 func read_args() {
     if len(os.Args) > 1 {
         config_file = os.Args[1]
     }
 }
 
+// Load the configuration file and attempt to read contents.
+// FATAL: If cannot read file
 func load_config() {
     data, err := ioutil.ReadFile(config_file)
     check(err)
     parse_config(string(data))
 }
 
+// Parse the loaded config line by line ignoring commented out lines
 func parse_config(config string) {
     for _, conf_line := range strings.Split(config, "\n") {
         if strings.HasPrefix(conf_line, "#") || strings.HasPrefix(conf_line, ";") {
@@ -102,6 +125,8 @@ func parse_config(config string) {
     validate_config()
 }
 
+// Validate the configuration loaded and check each property contains valid value
+// FATAL: If web root is invalid path
 func validate_config() {
     // validate web root
     if _, err := os.Stat(configuration["root"]); os.IsNotExist(err) {
@@ -130,6 +155,10 @@ func validate_config() {
     }
 }
 
+// Checks if a path is valid in the file system
+// If is a valid file, returns true
+// If is a valid directory, checks for an index file
+// Otherwise returns false
 func valid_path(path string) (bool, string) {
     if valid_file(path) {
         return true, path
@@ -142,6 +171,7 @@ func valid_path(path string) (bool, string) {
     return false, path
 }
 
+// Checks if given directory has a valid index file
 func valid_index(path string) (bool, string) {
     if strings.HasSuffix(path, "/") {
         for _, in := range index_files {
@@ -156,6 +186,8 @@ func valid_index(path string) (bool, string) {
     return valid_index(path + "/")
 }
 
+// Checks if a given file is valid and not a directory
+// Reports dotfiles as invalid as they should not be sent back over HTTP e.g. .htaccess / .htpasswd
 func valid_file(path string) bool {
     filePath := strings.Split(path, "/")
 
@@ -168,12 +200,14 @@ func valid_file(path string) bool {
     return err == nil && !info.IsDir()
 }
 
+// Checks if given [ath is a valid directory
 func valid_dir(path string) bool {
     info, err := os.Stat(path)
     
     return err == nil && info.IsDir()
 }
 
+// Returns the extension of a file or file in a path
 func get_extension(file string) string {
     if strings.Contains(file, "/") {
         file = get_file(file)
@@ -188,16 +222,19 @@ func get_extension(file string) string {
     return "." + fileName[len(fileName) - 1]
 }
 
+// Returns the filename and extension from a path
 func get_file(path string) string {
     filePath := strings.Split(path, "/")
     
     return filePath[len(filePath) - 1]
 }
 
+// Returns the MIME type of a given byte array
 func get_mime_type(data []byte) string {
     return http.DetectContentType(data)
 }
 
+// Formats an int64 into bytes/Kb/Mb/Gb/Tb/Pb/Eb
 func format_bytes(bytes int64) string {
     if bytes < BYTES_PER_KB {
         return strconv.FormatInt(bytes, 10) + " B"
@@ -211,6 +248,9 @@ func format_bytes(bytes int64) string {
 
 }
 
+// Loads the file watcher for cachced files
+// Watched files are removed from cache and then the watcher if modified on the file system
+// FATAL: If cannot start file watcher
 func load_file_watcher() {
     watcher, err := fsnotify.NewWatcher()
     check(err)
@@ -234,14 +274,17 @@ func load_file_watcher() {
     <-done
 }
 
+// Returns the HTML img tag for a requested icon
 func get_icon(icon string) string {
     return "<img src=\"" + file_icons[icon] + "\" alt=\"" + icon + " icon\" />"
 }
 
+// Return an HTML img tag for a given MIME type
 func get_icon_by_mime(mime string) string {
     return ""
 }
 
+// Return either a file icon or a folder icon 
 func file_folder_icon(is_directory bool) string {
     if is_directory {
         return get_icon("folder")
@@ -250,6 +293,12 @@ func file_folder_icon(is_directory bool) string {
     return get_icon("file")
 }
 
+// Send a file with given status and file path
+// If the file cannot be read, HTTP code 423 is sent
+// If the file is cached, send the file contents from cache
+// If the file is not cached, attempt to read it, cache it and add it to the file watcher
+// If the file is not valid, send HTTP code 404
+// Other wise send HTTP code 200 with the file contents
 func send_file(r *http.Request, w http.ResponseWriter, status int, static_file string) {
     var data string
     var mime_type string
@@ -279,6 +328,8 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
     }
 }
 
+// If the showfiles config setting is on, the client has request a directory and the directory does not have a valid
+// index, send a list of files in the directory
 func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     files, _ := ioutil.ReadDir(configuration["root"] + url)
     file_list := "<html>"
@@ -325,6 +376,9 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     send_response(r, w, 200, "text/html", file_list)
 }
 
+// Send a not found HTTP response
+// If a custom 404 page is availabe and can be read, send it
+// Otherwise send a plain 404 message
 func send_not_found(r *http.Request, w http.ResponseWriter) {
     if configuration["error404"] != "" {
         send_file(r, w, 404, configuration["error404"])
@@ -333,10 +387,13 @@ func send_not_found(r *http.Request, w http.ResponseWriter) {
     }
 }
 
+// Send an HTTP resourse locked code: 423
 func send_locked(r *http.Request, w http.ResponseWriter) {
     send_response(r, w, 423, "", "")
 }
 
+// Send an HTTP response with a given code, content type and contents
+// Set the content type if provided
 func send_response(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
     if content_type != "" {
         w.Header().Set("Content-Type", content_type)
@@ -348,18 +405,23 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
     io.WriteString(w, content)
 }
 
+// Set the server interface and port to the configuration set value and start the server
+// FATAL: If the server cannot be started
 func start_server() {
     server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
     log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
     check(server.ListenAndServe())
 }
 
+// Check if the error exists
+// If so log a Fatal error
 func check(err error) {
     if err != nil {
         log.Fatal(err)
     }
 }
 
+// Load the args, load the config, start the file watcher and then start the server
 func main() {
     read_args()
     load_config()
