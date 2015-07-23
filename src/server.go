@@ -238,6 +238,10 @@ func get_icon(icon string) string {
     return "<img src=\"" + file_icons[icon] + "\" alt=\"" + icon + " icon\" />"
 }
 
+func get_icon_by_mime(mime string) string {
+
+}
+
 func file_folder_icon(is_directory bool) string {
     if is_directory {
         return get_icon("folder")
