@@ -336,6 +336,7 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
 // If the showfiles config setting is on, the client has request a directory and the directory does not have a valid
 // index, send a list of files in the directory
 func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
+    // Get list of files
     files, _ := ioutil.ReadDir(configuration["root"] + url)
     file_list := "<html>"
     file_list += "<head>"
@@ -352,11 +353,13 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     file_list += "<tr><td>Name</td><td>Last modified</td><td>Size</td></tr>"
     file_list += "<tr><td>" + get_icon("back") + " <a href=\"../\">Parent directory</a></td><td></td><td></td></tr>"
 
+    // Appending a forward slash makes it easier to generate links later
     if !strings.HasSuffix(url, "/") {
         url += "/"
     }
 
     for _, f := range files {
+        // Get stats for file
         info, _ := os.Stat(configuration["root"] + url + f.Name())
         file_list += "<tr>"
         file_list += "<td>" + file_folder_icon(info.IsDir()) + " <a href=\"" + url + f.Name() + "\">" + f.Name() +
@@ -364,6 +367,7 @@ func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
         file_list += "<td>" + info.ModTime().String() + "</td>"
         file_list += "<td>"
 
+        // Ignore size if is directory
         if !info.IsDir() {
             file_list += format_bytes(info.Size())
         } else {
