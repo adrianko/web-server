@@ -4,7 +4,7 @@ import (
     "testing"
 )
 
-func TestValid_dir(t * testing.T) {
+func Test_valid_dir(t * testing.T) {
     valid := valid_dir("/etc")
 
     if !valid {
