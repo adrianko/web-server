@@ -239,7 +239,7 @@ func get_icon(icon string) string {
 }
 
 func get_icon_by_mime(mime string) string {
-
+    return ""
 }
 
 func file_folder_icon(is_directory bool) string {
