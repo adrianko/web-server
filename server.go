@@ -84,11 +84,12 @@ type Handler struct {}
 // All requests are parse and passed through ServeHTTP
 // Acts as a controller
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+    // If valid file, send straight to client
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
-    } else if configuration["showfiles"] == "on" {
+    } else if configuration["showfiles"] == "on" { // If is directroy and showfiles is on, send file list
         send_file_list(r, w, r.URL.String())
-    } else {
+    } else { // Otherwise not found
         send_not_found(r, w)
     }
 }
@@ -151,6 +152,7 @@ func validate_config() {
         err_file = configuration["root"] + "/" + err_file
     }
     
+    // Ensure can read file contents <- Might be able to cache on start up
     if valid_file(err_file) {    
         _, err := ioutil.ReadFile(err_file)
             
@@ -179,12 +181,14 @@ func valid_path(path string) (bool, string) {
 // Checks if given directory has a valid index file
 func valid_index(path string) (bool, string) {
     if strings.HasSuffix(path, "/") {
+        // For each index, check if valid file, if so, send back path
         for _, in := range index_files {
             if valid_file(path + in) {
                 return true, path + in
             }
         }
 
+        // No index found so invalid index
         return false, path
     }
 
@@ -196,12 +200,14 @@ func valid_index(path string) (bool, string) {
 func valid_file(path string) bool {
     filePath := strings.Split(path, "/")
 
+    // If first character is ".", send back invalid
     if strings.HasPrefix(filePath[len(filePath) - 1], ".") {
         return false;
     }
 
     info, err := os.Stat(path); 
-    
+
+    // Is there and is not directory
     return err == nil && !info.IsDir()
 }
 
@@ -266,8 +272,11 @@ func load_file_watcher() {
         for {
             select {
             case event := <-file_watcher.Events:
+                // Check if file has been modified
                 if event.Op&fsnotify.Write == fsnotify.Write {
+                    // Remove from cache
                     delete(file_cache, event.Name)
+                    // Remove from file watcher
                     file_watcher.Remove(event.Name)
                 }
             case err := <-file_watcher.Errors:
@@ -308,12 +317,16 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
     var data string
     var mime_type string
 
+    // Check if file is cached
     if value, ok := file_cache[static_file]; ok {
+        // Read from cache
         data = value.content  
         mime_type = value.content_type
     } else {
+        // Read from file system if not cached
         file_data, err := ioutil.ReadFile(static_file)
 
+        // Cannot read in file contents
         if err != nil {
             log.Println("Could not read file: " + static_file)
             send_locked(r, w)
@@ -322,10 +335,13 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
 
         data = string(file_data)
         mime_type = get_mime_type(file_data)
+        // Add file to cache
         file_cache[static_file] = CacheFile{data, mime_type}
+        // Add file to watcher
         file_watcher.Add(static_file)
     }
 
+    // If file is valid send back
     if valid_file(static_file) {
         send_response(r, w, status, mime_type, data)
     } else {
@@ -338,6 +354,7 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
 func send_file_list(r *http.Request, w http.ResponseWriter, url string) {
     // Get list of files
     files, _ := ioutil.ReadDir(configuration["root"] + url)
+    // Start building HTML
     file_list := "<html>"
     file_list += "<head>"
     file_list += "<title>Index of: " + url + "</title>"
@@ -432,8 +449,12 @@ func check(err error) {
 
 // Load the args, load the config, start the file watcher and then start the server
 func main() {
+    // Check for custom config
     read_args()
+    // Load configuration and parse
     load_config()
+    // Start the file watcher in a new thread to prevent blocking of server
     go load_file_watcher()
+    // Start the server
     start_server()
 }
