@@ -84,7 +84,7 @@ type Handler struct {}
 // All requests are parse and passed through ServeHTTP
 // Acts as a controller
 func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-    // If valid file, send straight to client
+    // If valid path (either file or index), send straight to client
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
     } else if configuration["showfiles"] == "on" { // If is directroy and showfiles is on, send file list
