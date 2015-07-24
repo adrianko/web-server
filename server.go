@@ -447,7 +447,8 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
 func send_gzip(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
     gz := gzip.NewWriter(w)
     defer gz.Close()
-    gzr := GzipResponseWriter{Writer: gz, ResponseWriter: w}
+    gzip := GzipResponseWriter{Writer: gz, ResponseWriter: w}
+    fmt.Println(gzip)
 }
 
 // Set the server interface and port to the configuration set value and start the server
