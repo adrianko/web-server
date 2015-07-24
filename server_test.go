@@ -105,3 +105,30 @@ func Test_format_bytes_gigabytes(t *testing.T) {
         t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
     }
 }
+
+func Test_format_bytes_terabytes(t *testing.T) {
+    bytes := 4398046511104
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "4.0 TB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
+
+func Test_format_bytes_petabytes(t *testing.T) {
+    bytes := 3377699720527872
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "3.0 PB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
+
+func Test_format_bytes_exabytes(t *testing.T) {
+    bytes := 2305843009213693952
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "2.0 EB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
