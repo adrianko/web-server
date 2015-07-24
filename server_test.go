@@ -44,12 +44,12 @@ func Test_valid_file__invalid(t *testing.T) {
     }
 }
 
-// Retrieve the file extension from "/etc/pf.os"
-// Should be ".os"
+// Retrieve the file extension from "/etc/mime.types"
+// Should be ".types"
 func Test_get_extension__valid(t *testing.T) {
-    ext := get_extension("/etc/pf.os")
+    ext := get_extension("/etc/mime.types")
 
-    if ext != ".os" {
+    if ext != ".types" {
         t.Errorf("Valid extension is invalid")
     }
 }
