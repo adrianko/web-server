@@ -6,7 +6,7 @@ import (
 
 // Test whether "/etc" is a valid directory
 // Should be true on any Unix system. Probably not for Windows
-func Test_valid_dir_valid(t *testing.T) {
+func Test_valid_dir__valid(t *testing.T) {
     valid := valid_dir("/etc")
 
     if !valid {
@@ -16,7 +16,7 @@ func Test_valid_dir_valid(t *testing.T) {
 
 // Test whether "/abc" is a valid directory
 // Should be false.
-func Test_valid_dir_invalid(t *testing.T) {
+func Test_valid_dir__invalid(t *testing.T) {
     valid := valid_dir("/abc")
 
     if valid {
@@ -26,7 +26,7 @@ func Test_valid_dir_invalid(t *testing.T) {
 
 // Test whether "/usr/bin/whoami" is a valid file
 // Should be true on any Unix system. Probably not for Windows
-func Test_valid_file_valid(t *testing.T) {
+func Test_valid_file__valid(t *testing.T) {
     valid := valid_file("/usr/bin/whoami")
 
     if !valid {
@@ -36,7 +36,7 @@ func Test_valid_file_valid(t *testing.T) {
 
 // Test whether "/usr/bin/xyzabc" is a valid file
 // Should be false
-func Test_valid_file_invalid(t *testing.T) {
+func Test_valid_file__invalid(t *testing.T) {
     valid := valid_file("/usr/bin/xyzabc")
 
     if valid {
