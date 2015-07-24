@@ -220,15 +220,19 @@ func valid_dir(path string) bool {
 
 // Returns the extension of a file in a path
 func get_extension(file string) string {
-    // If isn't valid file, don't bother with trying to get extension, just return nothing
-    if !valid_file(file) {
+    // File should be on a path otherwise cannot be valid
+    fileName := strings.Split(get_file(file), ".")
+    ext := "." + fileName[len(fileName) - 1]
+
+    if get_file(file) == ext {
         return ""
     }
 
-    // File should be on a path otherwise cannot be valid
-    fileName := strings.Split(get_file(file), ".")
-
-    return "." + fileName[len(fileName) - 1]
+    if !valid_file(file) || valid_dir(path) {
+        return ""
+    }
+    
+    return ext
 }
 
 // Returns the filename and extension from a path
