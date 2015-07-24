@@ -43,3 +43,19 @@ func Test_valid_file__invalid(t *testing.T) {
         t.Errorf("Invalid file is valid")
     }
 }
+
+func Test_get_extension__valid(t *testing.T) {
+    ext := get_extension("/etc/pf.os")
+
+    if ext != ".os" {
+        t.Errorf("Valid extension is invalid")
+    }
+}
+
+func Test_get_extension__invalid(t *testing.T) {
+    ext := get_extension("/bin")
+
+    if ext != "" {
+        t.Errorf("Invalid extension is valid")
+    }
+}
