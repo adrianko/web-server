@@ -106,6 +106,8 @@ func Test_format_bytes_gigabytes(t *testing.T) {
     }
 }
 
+// Test whether 4398046511104 bytes is formatted correctly
+// Should return "4.0 TB"
 func Test_format_bytes_terabytes(t *testing.T) {
     bytes := 4398046511104
     formatted := format_bytes(int64(bytes))
@@ -115,6 +117,8 @@ func Test_format_bytes_terabytes(t *testing.T) {
     }
 }
 
+// Test whether 3377699720527872 bytes is formatted correctly
+// Should return "3.0 PB"
 func Test_format_bytes_petabytes(t *testing.T) {
     bytes := 3377699720527872
     formatted := format_bytes(int64(bytes))
@@ -124,6 +128,8 @@ func Test_format_bytes_petabytes(t *testing.T) {
     }
 }
 
+// Test whether 2305843009213693952 bytes is formatted correctly
+// Should return "2.0 EB"
 func Test_format_bytes_exabytes(t *testing.T) {
     bytes := 2305843009213693952
     formatted := format_bytes(int64(bytes))
