@@ -1,8 +1,6 @@
 package main
 
-import (
-    "testing"
-)
+import "testing"
 
 // Test whether "/etc" is a valid directory
 // Should be true on any Unix system. Probably not for Windows
