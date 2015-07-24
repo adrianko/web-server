@@ -24,6 +24,8 @@ func Test_valid_dir_invalid(t *testing.T) {
     }
 }
 
+// Test whether "/usr/bin/whoami" is a valid file
+// Should be true on any Unix system. Probably not for Windows
 func Test_valid_file_valid(t *testing.T) {
     valid := valid_file("/usr/bin/whoami")
 
@@ -32,6 +34,8 @@ func Test_valid_file_valid(t *testing.T) {
     }
 }
 
+// Test whether "/usr/bin/xyzabc" is a valid file
+// Should be false
 func Test_valid_file_invalid(t *testing.T) {
     valid := valid_file("/usr/bin/xyzabc")
 
