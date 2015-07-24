@@ -142,6 +142,8 @@ func Test_format_bytes__exabytes(t *testing.T) {
     }
 }
 
+// Test whether get_mime_type returns corrent MIME type from html snippet
+// Should return string containing "text/html"
 func Test_get_mime_type__html(t *testing.T) {
     mime := get_mime_type([]byte("<html><head><title>Hello</title></head><body><h1></h1></body></html>"))
 
