@@ -44,6 +44,8 @@ func Test_valid_file__invalid(t *testing.T) {
     }
 }
 
+// Retrieve the file extension from "/etc/pf.os"
+// Should be ".os"
 func Test_get_extension__valid(t *testing.T) {
     ext := get_extension("/etc/pf.os")
 
@@ -52,6 +54,8 @@ func Test_get_extension__valid(t *testing.T) {
     }
 }
 
+// Retrieve the file extension from "/bin"
+// SHould return empty string
 func Test_get_extension__invalid(t *testing.T) {
     ext := get_extension("/bin")
 
