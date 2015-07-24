@@ -1,16 +1,16 @@
 package main
 
 import (
+    "fmt"
+    "gopkg.in/fsnotify.v1"
     "io"
     "io/ioutil"
     "log"
+    "math"
     "net/http"
     "os"
     "strings"
     "strconv"
-    "math"
-    "fmt"
-    "gopkg.in/fsnotify.v1"
 )
 /**
  * TODO Add icons to different folder and file types in file index
