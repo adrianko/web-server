@@ -148,6 +148,22 @@ func Test_get_mime_type__html(t *testing.T) {
     mime := get_mime_type([]byte("<html><head><title>Hello</title></head><body><h1></h1></body></html>"))
 
     if !strings.Contains(mime, "text/html") {
-        t.Errorf("MIME Type produced: %s", mime)
+        t.Errorf("MIME type produced: %s", mime)
+    }
+}
+
+func Test_get_mime_type__plain(t *testing.T) {
+    mime := get_mime_type([]byte("body { font-size: 12px; }"))
+
+    if !strings.Contains(mime, "text/plain") {
+        t.Errorf("MIME type produced: %s", mime)
+    }
+}
+
+func Test_get_mime_type__xml(t *testing.T) {
+    mime := get_mime_type([]byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"))
+
+    if !strings.Contains(mime, "text/xml") && !strings.Contains(mime, "application/xml") {
+        t.Errorf("MIME type produced: %s", mime)
     }
 }
