@@ -218,17 +218,15 @@ func valid_dir(path string) bool {
     return err == nil && info.IsDir()
 }
 
-// Returns the extension of a file or file in a path
+// Returns the extension of a file in a path
 func get_extension(file string) string {
-    if strings.Contains(file, "/") {
-        file = get_file(file)
-    }
-    
+    // If isn't valid file, don't bother with trying to get extension, just return nothing
     if !valid_file(file) {
         return ""
     }
-    
-    fileName := strings.Split(file, ".")
+
+    // File should be on a path otherwise cannot be valid
+    fileName := strings.Split(get_file(file), ".")
 
     return "." + fileName[len(fileName) - 1]
 }
