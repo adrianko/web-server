@@ -80,6 +80,12 @@ type CacheFile struct {
     content_type string
 }
 
+// Wrapper for Gzip response
+type GzipResponseWriter struct {
+    io.Writer
+    http.ResponseWriter
+}
+
 // Default server handler
 type Handler struct {}
 
