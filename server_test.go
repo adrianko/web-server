@@ -45,6 +45,22 @@ func Test_valid_file__invalid(t *testing.T) {
     }
 }
 
+func Test_valid_path__valid(t *testing.T) {
+    valid := valid_path("/usr/bin/whoami")
+
+    if !valid {
+        t.Errorf("Valid file is invalid")
+    }
+}
+
+func Test_valid_path__invalid(t *testing.T) {
+    valid := valid_path("/usr/bin/abcxyz")
+
+    if valid {
+        t.Errorf("Invalid file is valid")
+    }
+}
+
 // Retrieve the file extension from "/etc/mime.types"
 // Should be ".types"
 func Test_get_extension__valid(t *testing.T) {
