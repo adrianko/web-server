@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+    "testing"
+    "strings"
+)
 
 // Test whether "/etc" is a valid directory
 // Should be true on any Unix system. Probably not for Windows
@@ -75,7 +78,7 @@ func Test_format_bytes__bytes(t *testing.T) {
 
 // Test whether 2048 bytes is formatted correctly
 // Should return "2.0 KB"
-func Test_format_bytes_kilobytes(t *testing.T) {
+func Test_format_bytes__kilobytes(t *testing.T) {
     bytes := 2048
     formatted := format_bytes(int64(bytes))
 
@@ -86,7 +89,7 @@ func Test_format_bytes_kilobytes(t *testing.T) {
 
 // Test whether 1048576 bytes is formatted correctly
 // Should return "1.0 MB"
-func Test_format_bytes_megabytes(t *testing.T) {
+func Test_format_bytes__megabytes(t *testing.T) {
     bytes := 1048576
     formatted := format_bytes(int64(bytes))
 
@@ -97,7 +100,7 @@ func Test_format_bytes_megabytes(t *testing.T) {
 
 // Test whether 3221225472 bytes is formatted correctly
 // Should return "3.0 GB"
-func Test_format_bytes_gigabytes(t *testing.T) {
+func Test_format_bytes__gigabytes(t *testing.T) {
     bytes := 3221225472
     formatted := format_bytes(int64(bytes))
 
@@ -108,7 +111,7 @@ func Test_format_bytes_gigabytes(t *testing.T) {
 
 // Test whether 4398046511104 bytes is formatted correctly
 // Should return "4.0 TB"
-func Test_format_bytes_terabytes(t *testing.T) {
+func Test_format_bytes__terabytes(t *testing.T) {
     bytes := 4398046511104
     formatted := format_bytes(int64(bytes))
 
@@ -119,7 +122,7 @@ func Test_format_bytes_terabytes(t *testing.T) {
 
 // Test whether 3377699720527872 bytes is formatted correctly
 // Should return "3.0 PB"
-func Test_format_bytes_petabytes(t *testing.T) {
+func Test_format_bytes__petabytes(t *testing.T) {
     bytes := 3377699720527872
     formatted := format_bytes(int64(bytes))
 
@@ -130,11 +133,19 @@ func Test_format_bytes_petabytes(t *testing.T) {
 
 // Test whether 2305843009213693952 bytes is formatted correctly
 // Should return "2.0 EB"
-func Test_format_bytes_exabytes(t *testing.T) {
+func Test_format_bytes__exabytes(t *testing.T) {
     bytes := 2305843009213693952
     formatted := format_bytes(int64(bytes))
 
     if formatted != "2.0 EB" {
         t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
+
+func Test_get_mime_type__html(t *testing.T) {
+    mime := get_mime_type([]byte("<html><head><title>Hello</title></head><body><h1></h1></body></html>"))
+
+    if !strings.Contains(mime, "text/html") {
+        t.Errorf("MIME Type produced: %s", mime)
     }
 }
