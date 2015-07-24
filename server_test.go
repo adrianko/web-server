@@ -70,3 +70,21 @@ func Test_format_bytes__bytes(t *testing.T) {
         t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
     }
 }
+
+func Test_format_bytes_kilobytes(t *testing.T) {
+    bytes := 2048
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "2.0 KB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
+
+func Test_format_bytes_megabytes(t *testing.T) {
+    bytes := 1048576
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "1.0 MB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
