@@ -228,7 +228,7 @@ func get_extension(file string) string {
         return ""
     }
 
-    if !valid_file(file) || valid_dir(path) {
+    if !valid_file(file) || valid_dir(file) {
         return ""
     }
     
