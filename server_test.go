@@ -88,3 +88,12 @@ func Test_format_bytes_megabytes(t *testing.T) {
         t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
     }
 }
+
+func Test_format_bytes_gigabytes(t *testing.T) {
+    bytes := 3221225472
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "3.0 GB" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
