@@ -142,7 +142,7 @@ func Test_format_bytes__exabytes(t *testing.T) {
     }
 }
 
-// Test whether get_mime_type returns corrent MIME type from html snippet
+// Test whether get_mime_type returns correct MIME type from HTML snippet
 // Should return string containing "text/html"
 func Test_get_mime_type__html(t *testing.T) {
     mime := get_mime_type([]byte("<html><head><title>Hello</title></head><body><h1></h1></body></html>"))
@@ -152,6 +152,8 @@ func Test_get_mime_type__html(t *testing.T) {
     }
 }
 
+// Test whether get_mime_type returns correct MIME type from CSS snippet
+// Should return string containing "text/plain"
 func Test_get_mime_type__plain(t *testing.T) {
     mime := get_mime_type([]byte("body { font-size: 12px; }"))
 
@@ -160,6 +162,9 @@ func Test_get_mime_type__plain(t *testing.T) {
     }
 }
 
+
+// Test whether get_mime_type returns correct MIME type from XML snippet
+// Should return string containind "text/xml" or "application/xml"
 func Test_get_mime_type__xml(t *testing.T) {
     mime := get_mime_type([]byte("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"))
 
