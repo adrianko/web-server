@@ -23,3 +23,19 @@ func Test_valid_dir_invalid(t *testing.T) {
         t.Errorf("Invalid directory is valid")
     }
 }
+
+func Test_valid_file_valid(t *testing.T) {
+    valid := valid_file("/usr/bin/whoami")
+
+    if !valid {
+        t.Errorf("Valid file is invalid")
+    }
+}
+
+func Test_valid_file_invalid(t *testing.T) {
+    valid := valid_file("/usr/bin/xyzabc")
+
+    if valid {
+        t.Errorf("Invalid file is valid")
+    }
+}
