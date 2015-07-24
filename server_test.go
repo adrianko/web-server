@@ -45,7 +45,7 @@ func Test_valid_file__invalid(t *testing.T) {
     }
 }
 
-func Test_valid_path__valid(t *testing.T) {
+func Test_valid_path__file_valid(t *testing.T) {
     valid := valid_path("/usr/bin/whoami")
 
     if !valid {
@@ -53,11 +53,27 @@ func Test_valid_path__valid(t *testing.T) {
     }
 }
 
-func Test_valid_path__invalid(t *testing.T) {
+func Test_valid_path__file_invalid(t *testing.T) {
     valid := valid_path("/usr/bin/abcxyz")
 
     if valid {
         t.Errorf("Invalid file is valid")
+    }
+}
+
+func Test_valid_path__dir_valid(t *testing.T) {
+    valid := valid_path("/bin")
+
+    if !valid {
+        t.Errorf("Valid directory is invalid")
+    }
+}
+
+func Test_valid_path__dir_invalid(t *testing.T) {
+    valid := valid_path("/abc")
+
+    if valid {
+        t.Errorf("Invalid directory is valid")
     }
 }
 
