@@ -115,6 +115,7 @@ func load_config() {
     parse_config(string(conf))
     validate_config()
 }
+
 // Load the configuration file and attempt to read contents.
 // FATAL: If cannot read file
 func load_config_file() []byte {
@@ -444,7 +445,9 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
 }
 
 func send_gzip(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
-    gzip.NewWriter(w)
+    gz ;= gzip.NewWriter(w)
+    defer gz.Close()
+    gzr := GzipResponseWriter{Writer: gz, ResponseWriter: w}
 }
 
 // Set the server interface and port to the configuration set value and start the server
