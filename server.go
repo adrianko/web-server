@@ -1,6 +1,7 @@
 package main
 
 import (
+    "compress/gzip"
     "fmt"
     "gopkg.in/fsnotify.v1"
     "io"
@@ -434,6 +435,10 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
     w.WriteHeader(status)
     //log.Printf("%d %s: %s", status, r.Method, r.URL.String())
     io.WriteString(w, content)
+}
+
+func send_gzip(r *http.Request, w http.ResponseWriter, status int, content_type string, content string) {
+    gzip.NewWriter(w)
 }
 
 // Set the server interface and port to the configuration set value and start the server
