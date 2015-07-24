@@ -27,7 +27,7 @@ const VERSION string = "0.4"
 const BYTES_PER_KB int64 = 1024
 
 // Float of BYTES_PER_KB.
-// Cached here to prevent frequent conversions of int64 to float64
+// Cached here to prevent frequent conversions of int64 to float64 in format_bytes
 const BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
 
 // Base64 encoded images sent back in file lists
