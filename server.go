@@ -14,6 +14,7 @@ import (
 )
 /**
  * TODO Add icons to different folder and file types in file index
+ * TODO Gzip encoding
  */
 
  // Name of the server sent in the HTTP response header
