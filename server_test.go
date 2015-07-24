@@ -61,3 +61,12 @@ func Test_get_extension__invalid(t *testing.T) {
         t.Errorf("Invalid extension is valid")
     }
 }
+
+func Test_format_bytes__bytes(t *testing.T) {
+    bytes := 1023
+    formatted := format_bytes(int64(bytes))
+
+    if formatted != "1023 B" {
+        t.Errorf("Format bytes produced: %s from %d", formatted, bytes)
+    }
+}
