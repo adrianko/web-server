@@ -341,12 +341,14 @@ func send_file(r *http.Request, w http.ResponseWriter, status int, static_file s
         file_watcher.Add(static_file)
     }
 
-    // If file is valid send back
-    if valid_file(static_file) {
-        send_response(r, w, status, mime_type, data)
-    } else {
+    // If file is invalid send not found
+    if !valid_file(static_file) {
         send_not_found(r, w)
+        return
     }
+
+    // Otherwise send file
+    send_response(r, w, status, mime_type, data)
 }
 
 // If the showfiles config setting is on, the client has request a directory and the directory does not have a valid
