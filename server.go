@@ -22,7 +22,7 @@ import (
 const SERVER_NAME string = "Maester"
 
 // Current version of the server
-const VERSION string = "0.4"
+const VERSION string = "0.5"
 
 // Number of bytes to use per Kb/Mb/Gb.
 // Can also use 1000 for SI
