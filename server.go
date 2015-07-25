@@ -81,7 +81,7 @@ type CacheFile struct {
 }
 
 // Wrapper for Gzip response
-type GzipResponseWriter struct {
+type GzipHandler struct {
     io.Writer
     http.ResponseWriter
 }
@@ -102,8 +102,23 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-func check_content_encoding(fn http.HandlerFunc) http.HandlerFunc {
-    return fn
+func ServeGzip(fn http.HandlerFunc) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
+            fn(w, r)
+            return
+        }
+
+        w.Header().Set("Content-Encoding", "gzip")
+        gz := gzip.NewWriter(w)
+        defer gz.Close()
+        gzr := GzipHandler{Writer: gz, ResponseWriter: w}
+        fn(gzr, r)
+    }
+}
+
+func (w GzipHandler) Write(b []byte) (int, error) {
+    return w.Writer.Write(b)
 }
 
 // Check if custom configuration file passed as argument
