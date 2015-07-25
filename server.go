@@ -86,12 +86,13 @@ type GzipHandler struct {
     http.ResponseWriter
 }
 
-// Default server handler
-type Handler struct {}
+func (w GzipHandler) Write(b []byte) (int, error) {
+    return w.Writer.Write(b)
+}
 
-// All requests are parse and passed through ServeHTTP
+// All requests are parse and passed through serve_http
 // Acts as a controller
-func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func serve_http(w http.ResponseWriter, r *http.Request) {
     // If valid path (either file or index), send straight to client
     if valid, path := valid_path(configuration["root"] + r.URL.String()); valid {
         send_file(r, w, 200, path)
@@ -102,7 +103,7 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-func ServeGzip(fn http.HandlerFunc) http.HandlerFunc {
+func check_gzip(fn http.HandlerFunc) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
             fn(w, r)
@@ -115,10 +116,6 @@ func ServeGzip(fn http.HandlerFunc) http.HandlerFunc {
         gzr := GzipHandler{Writer: gz, ResponseWriter: w}
         fn(gzr, r)
     }
-}
-
-func (w GzipHandler) Write(b []byte) (int, error) {
-    return w.Writer.Write(b)
 }
 
 // Check if custom configuration file passed as argument
@@ -466,8 +463,8 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
 // Set the server interface and port to the configuration set value and start the server
 // FATAL: If the server cannot be started
 func start_server() {
-    check(http.ListenAndServe(configuration["interface"] + ":" + configuration["port"], ServeGzip(handler)))
     log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
+    check(http.ListenAndServe(configuration["interface"] + ":" + configuration["port"], check_gzip(serve_http)))
 }
 
 // Check if the error exists
