@@ -102,6 +102,10 @@ func (*Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func check_content_encoding(fn http.HandlerFunc) http.HandlerFunc {
+    return fn
+}
+
 // Check if custom configuration file passed as argument
 func read_args() {
     if len(os.Args) > 1 {
