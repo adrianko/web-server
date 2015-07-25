@@ -466,9 +466,8 @@ func send_response(r *http.Request, w http.ResponseWriter, status int, content_t
 // Set the server interface and port to the configuration set value and start the server
 // FATAL: If the server cannot be started
 func start_server() {
-    server := http.Server{Addr: configuration["interface"] + ":" + configuration["port"], Handler: &Handler{}}
+    check(http.ListenAndServe(configuration["interface"] + ":" + configuration["port"], ServeGzip(handler)))
     log.Printf("Running server %s:%s\n", configuration["interface"], configuration["port"])
-    check(server.ListenAndServe())
 }
 
 // Check if the error exists
