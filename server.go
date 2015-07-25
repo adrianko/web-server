@@ -86,6 +86,7 @@ type GzipHandler struct {
     http.ResponseWriter
 }
 
+// io.Writer Write method exposed to public
 func (w GzipHandler) Write(b []byte) (int, error) {
     return w.Writer.Write(b)
 }
@@ -103,6 +104,9 @@ func serve_http(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+// Check if Gzip is accepted encoding
+// If so send gzip writer
+// Otherwise send normal response writer
 func check_gzip(fn http.HandlerFunc) http.HandlerFunc {
     return func(w http.ResponseWriter, r *http.Request) {
         if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
