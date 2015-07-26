@@ -14,8 +14,10 @@ import (
     "strconv"
 )
 /**
- * TODO Add icons to different folder and file types in file index
- * TODO Gzip encoding
+ * TODO v0.5 - Add icons to different folder and file types in file index
+ * TODO v0.6 - Support for WWW_Authenticate
+ * TODO v0.7 - URL rewriting
+ * TODO v0.8 - FastCGI / equivalent
  */
 
  // Name of the server sent in the HTTP response header
