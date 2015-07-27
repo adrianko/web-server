@@ -10,6 +10,7 @@ exec {
 
     'add-go-root':
         command => 'echo "export GOPATH=/home/vagrant/testing/pkg" >> .bash_profile',
+        provider => shell,
         cwd => '/home/vagrant';
         
     'retrieve-code':
