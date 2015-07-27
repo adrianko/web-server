@@ -8,27 +8,19 @@ exec {
         command => 'apt-get upgrade -y',
         require => Exec['update'];
 
-    'create-go-root':
-        command => 'mkdir .go',
-        cwd => '/home/vagrant';
-
     'add-go-root':
-        command => 'echo "export GOPATH=$HOME/.go" >> .bash_profile',
-        cwd => '/home/vagrant';
-    
-    'create-testing-folder':
-        command => 'mkdir testing',
+        command => 'echo "export GOPATH=$HOME/testing/pkg" >> .bash_profile',
         cwd => '/home/vagrant';
         
     'retrieve-code':
         command => 'cp -r web-server/*.go testing/',
         cwd => '/home/vagrant',
-        require => Exec['create-testing-folder'];
+        require => [ Exec['create-testing-folder'], File['/home/vagrant/testing'] ];
 
     'get-build-dependencies':
         command => 'go get',
         cwd => '/home/vagrant/testing',
-        require => [ Package['golang'], Exec['retrieve-code'] ];
+        require => [ Package['golang'], Exec['retrieve-code'], File['/home/vagrant/testing/pkg'] ];
 
     'build':
         command => 'go build server.go',
@@ -68,4 +60,14 @@ file {
         group => root,
         mode => 644,
         source => '/vagrant/config/maester-http';
+        
+    '/home/vagrant/testing':
+        ensure => directory,
+        owner => vagrant,
+        group => vagrant;
+    
+    '/home/vagrant/testing/pkg':
+        ensure => directory,
+        owner => vagrant,
+        group => vagrant;
 }
