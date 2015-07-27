@@ -7,18 +7,33 @@ exec {
     'upgrade':
         command => 'apt-get upgrade -y',
         require => Exec['update'];
+
+    'create-go-root':
+        command => 'mkdir .go',
+        cwd => '/home/vagrant';
+
+    'add-go-root':
+        command => 'echo "export GOPATH=$HOME/.go" >> .bash_profile',
+        cwd => '/home/vagrant';
     
     'create-testing-folder':
-        command => 'mkdir /home/vagrant/testing';
+        command => 'mkdir testing',
+        cwd => '/home/vagrant';
         
     'retrieve-code':
-        command => 'cp /home/vagrant/web-server/*.go /home/vagrant/testing/*.go',
+        command => 'cp -r web-server/*.go testing/',
+        cwd => '/home/vagrant',
         require => Exec['create-testing-folder'];
+
+    'get-build-dependencies':
+        command => 'go get',
+        cwd => '/home/vagrant/testing',
+        require => [ Package['golang'], Exec['retrieve-code'] ];
 
     'build':
         command => 'go build server.go',
         cwd => '/home/vagrant/testing',
-        require => [ Exec['retrieve-code'], Package['golang'] ];
+        require => [ Exec['get-build-dependencies'], Package['golang'] ];
 }
 
 package {
