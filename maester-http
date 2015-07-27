@@ -1,5 +1,0 @@
-interface 0.0.0.0
-port 8000
-root /Users/ak/code/workspace/web-server/web-root
-index index.html index.htm
-showfiles on
