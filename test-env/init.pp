@@ -9,7 +9,7 @@ exec {
         require => Exec['update'];
 
     'add-go-root':
-        command => 'echo "export GOPATH=$HOME/testing/pkg" >> .bash_profile',
+        command => 'echo "export GOPATH=/home/vagrant/testing/pkg" >> .bash_profile',
         cwd => '/home/vagrant';
         
     'retrieve-code':
