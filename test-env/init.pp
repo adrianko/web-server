@@ -13,7 +13,7 @@ exec {
         
     'retrieve-code':
         command => 'cp /home/vagrant/web-server/*.go /home/vagrant/testing/*.go',
-        require => Exec['create-testing-code'];
+        require => Exec['create-testing-folder'];
 
     'build':
         command => 'go build server.go',
