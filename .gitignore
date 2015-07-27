@@ -25,3 +25,4 @@ _testmain.go
 bin
 web-root
 .DS_Store
+.vagrant
