@@ -10,7 +10,7 @@ exec {
 }
 
 package {
-    ['nginx', 'apache2', 'golang']:
+    ['nginx', 'apache2', 'golang', 'git']:
         ensure => present,
         require => Exec['upgrade'];
 }
