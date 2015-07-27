@@ -15,7 +15,7 @@ exec {
     'retrieve-code':
         command => 'cp -r web-server/*.go testing/',
         cwd => '/home/vagrant',
-        require => [ Exec['create-testing-folder'], File['/home/vagrant/testing'] ];
+        require => File['/home/vagrant/testing'];
 
     'get-build-dependencies':
         command => 'go get',
@@ -25,7 +25,7 @@ exec {
     'build':
         command => 'go build server.go',
         cwd => '/home/vagrant/testing',
-        require => [ Exec['get-build-dependencies'], Package['golang'] ];
+        require => Exec['get-build-dependencies'];
 }
 
 package {
