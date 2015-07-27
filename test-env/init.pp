@@ -31,7 +31,14 @@ file {
         owner => root,
         group => root,
         mode => 644,
-        source => '/vagrant/nginx/default',
+        source => '/vagrant/config/nginx/default',
         notify => Service['nginx'],
         require => Package['nginx'];
+
+    '/etc/maester-http':
+        ensure => present,
+        owner => root,
+        group => root,
+        mode => 644,
+        source => '/vagrant/config/maester-http';
 }
