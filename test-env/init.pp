@@ -7,6 +7,18 @@ exec {
     'upgrade':
         command => 'apt-get upgrade -y',
         require => Exec['update'];
+    
+    'create-testing-folder':
+        command => 'mkdir /home/vagrant/testing';
+        
+    'retrieve-code':
+        command => 'cp /home/vagrant/web-server/*.go /home/vagrant/testing/*.go',
+        require => Exec['create-testing-code'];
+
+    'build':
+        command => 'go build server.go',
+        cwd => '/home/vagrant/testing',
+        require => [ Exec['retrieve-code'], Package['golang'] ];
 }
 
 package {

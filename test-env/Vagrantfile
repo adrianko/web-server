@@ -1,6 +1,7 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
   config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.synced_folder "../", "/home/vagrant/web-server"
   config.vm.provider "virtualbox" do |vb|
     vb.name = "web-server"
     vb.memory = "512"
