@@ -61,4 +61,18 @@ file {
         ensure => directory,
         owner => vagrant,
         group => vagrant;
+
+    '/home/vagrant/build.sh':
+        ensure => present,
+        owner => vagrant,
+        group => vagrant,
+        mode => 755,
+        source => '/vagrant/build.sh';
+
+    '/home/vagrant/run-servers.sh':
+        ensure => present,
+        owner => vagrant,
+        group => vagrant,
+        mode => 755,
+        source => '/vagrant/run-servers.sh';
 }
