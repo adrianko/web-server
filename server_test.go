@@ -108,6 +108,7 @@ func Test_get_extension__invalid(t *testing.T) {
 // Test whether 1023 bytes is formatted correctly
 // Should return "1023 B"
 func Test_format_bytes__bytes(t *testing.T) {
+    t.Parallel()
     bytes := 1023
     formatted := format_bytes(int64(bytes))
 
@@ -119,6 +120,7 @@ func Test_format_bytes__bytes(t *testing.T) {
 // Test whether 2048 bytes is formatted correctly
 // Should return "2.0 KB"
 func Test_format_bytes__kilobytes(t *testing.T) {
+    t.Parallel()
     bytes := 2048
     formatted := format_bytes(int64(bytes))
 
@@ -130,6 +132,7 @@ func Test_format_bytes__kilobytes(t *testing.T) {
 // Test whether 1048576 bytes is formatted correctly
 // Should return "1.0 MB"
 func Test_format_bytes__megabytes(t *testing.T) {
+    t.Parallel()
     bytes := 1048576
     formatted := format_bytes(int64(bytes))
 
@@ -141,6 +144,7 @@ func Test_format_bytes__megabytes(t *testing.T) {
 // Test whether 3221225472 bytes is formatted correctly
 // Should return "3.0 GB"
 func Test_format_bytes__gigabytes(t *testing.T) {
+    t.Parallel()
     bytes := 3221225472
     formatted := format_bytes(int64(bytes))
 
@@ -152,6 +156,7 @@ func Test_format_bytes__gigabytes(t *testing.T) {
 // Test whether 4398046511104 bytes is formatted correctly
 // Should return "4.0 TB"
 func Test_format_bytes__terabytes(t *testing.T) {
+    t.Parallel()
     bytes := 4398046511104
     formatted := format_bytes(int64(bytes))
 
@@ -163,6 +168,7 @@ func Test_format_bytes__terabytes(t *testing.T) {
 // Test whether 3377699720527872 bytes is formatted correctly
 // Should return "3.0 PB"
 func Test_format_bytes__petabytes(t *testing.T) {
+    t.Parallel()
     bytes := 3377699720527872
     formatted := format_bytes(int64(bytes))
 
@@ -174,6 +180,7 @@ func Test_format_bytes__petabytes(t *testing.T) {
 // Test whether 2305843009213693952 bytes is formatted correctly
 // Should return "2.0 EB"
 func Test_format_bytes__exabytes(t *testing.T) {
+    t.Parallel()
     bytes := 2305843009213693952
     formatted := format_bytes(int64(bytes))
 
