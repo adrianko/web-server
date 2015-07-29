@@ -70,6 +70,9 @@ var file_icons map[string]string = map[string]string{
     "diskimg":  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAGFBMVEXAwMAeBAT///+/v7+ZmZmAg" +
                 "IAzMzMAAABwV7AqAAAAAXRSTlMAQObYZgAAAFRJREFUeAGdyFEOgCAMBFEstL3/jV11MV1DNHHm77WoNRZ2FxYrpCpSFakVM463" +
                 "B54pooGImd7dPTt0Yp+Yhgr6Atk32tVfZIIzK6i9YAwpgCg14A66eAVtgrFgFQAAAABJRU5ErkJggg==",
+    "video":    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAMAAAD3n0w0AAAAFVBMVEX////M///MzMyZmZlmZmYzM" +
+                "zMAAAC3QbbwAAAAAnRSTlP/AOW3MEoAAAA9SURBVHja3Y4xCgAwCMS8Vv3/k6soFnTt1GwJHkjaAUC61g0ukpETqmjwDlzqsqLJ" +
+                "iC/nlMT81+dnhHSAA+N0BnLhg8fdAAAAAElFTkSuQmCC",
 }
 
 // The default configuration file
