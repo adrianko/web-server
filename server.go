@@ -28,13 +28,12 @@ const (
     // Current version of the server
     VERSION = "0.5"
 
-
-// Number of bytes to use per Kb/Mb/Gb.
-// Can also use 1000 for SI
+    // Number of bytes to use per Kb/Mb/Gb.
+    // Can also use 1000 for SI
     BYTES_PER_KB int64 = 1024
 
-// Float of BYTES_PER_KB.
-// Cached here to prevent frequent conversions of int64 to float64 in format_bytes
+    // Float of BYTES_PER_KB.
+    // Cached here to prevent frequent conversions of int64 to float64 in format_bytes
     BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
 )
 
