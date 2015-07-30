@@ -27,15 +27,16 @@ const (
 
     // Current version of the server
     VERSION = "0.5"
-)
+
 
 // Number of bytes to use per Kb/Mb/Gb.
 // Can also use 1000 for SI
-const BYTES_PER_KB int64 = 1024
+    BYTES_PER_KB int64 = 1024
 
 // Float of BYTES_PER_KB.
 // Cached here to prevent frequent conversions of int64 to float64 in format_bytes
-const BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
+    BYTES_PER_KB_FL float64 = float64(BYTES_PER_KB)
+)
 
 // Base64 encoded images sent back in file lists
 var file_icons map[string]string = map[string]string{
