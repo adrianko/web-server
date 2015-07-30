@@ -21,11 +21,13 @@ import (
  * TODO v0.8 - FastCGI / equivalent
  */
 
- // Name of the server sent in the HTTP response header
-const SERVER_NAME string = "Maester"
+const (
+    // Name of the server sent in the HTTP response header
+    SERVER_NAME = "Maester"
 
-// Current version of the server
-const VERSION string = "0.5"
+    // Current version of the server
+    VERSION = "0.5"
+)
 
 // Number of bytes to use per Kb/Mb/Gb.
 // Can also use 1000 for SI
