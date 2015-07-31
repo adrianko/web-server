@@ -351,7 +351,17 @@ func get_icon(icon string) string {
 
 // Return an HTML img tag for a given MIME type
 func get_icon_by_mime(mime string) string {
-    return ""
+    if strings.Contains(mime, "image/") {
+        return "image"
+    } else if strings.Contains(mime, "application/x-") {
+        return "compressed"
+    } else if strings.Contains(mime, "video/") {
+        return "video"
+    } else if strings.Contains(mime, "audio/") {
+        return "audio"
+    } else {
+        return "file"
+    }
 }
 
 // Return either a file icon or a folder icon 
