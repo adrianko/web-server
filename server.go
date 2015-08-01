@@ -359,6 +359,8 @@ func get_icon_by_mime(mime string) string {
         return "video"
     } else if strings.Contains(mime, "audio/") {
         return "audio"
+    } else if strings.Contains(mime, "text") {
+        return "text"
     } else {
         return "file"
     }
