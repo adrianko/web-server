@@ -361,7 +361,7 @@ func get_icon_by_mime(mime string) string {
         return "audio"
     } else if strings.Contains(mime, "text") {
         return "text"
-    } else if strings.Contains(mime, "diskimg") {
+    } else if strings.Contains(mime, "diskimg") || strings.Contains(mime. "iso") {
         return "diskimg"
     } else {
         return "file"
